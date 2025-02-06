@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import connectDB from './config/db.js';
+
 import galleryRoutes from './routes/galleryRoute.js';
 import userRoutes from './routes/userRoute.js';
 

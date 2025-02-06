@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Registra un nuovo utente
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
@@ -32,7 +32,7 @@ export const registerUser = async (req, res) => {
 };
 
 // Effettua il login
-export const loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -66,7 +66,7 @@ export const loginUser = async (req, res) => {
 };
 
 // Ottieni il profilo dell'utente autenticato
-export const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
     // Recupera l'utente dal token
     const user = await User.findById(req.user.id).select('-password'); // Escludi la password
@@ -79,3 +79,5 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Errore durante il recupero del profilo', error });
   }
 };
+
+export default{registerUser, loginUser, getUserProfile};
