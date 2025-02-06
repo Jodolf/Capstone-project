@@ -1,8 +1,11 @@
-import express from ('express');
-import dotenv from ('dotenv');
-import cors from ('cors');
-import connectDB from ('./config/db');
-import mongoose from "mongoose";
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import mongoose from 'mongoose';
+
+import connectDB from './config/db.js';
+import galleryRoutes from './routes/galleryRoute.js';
+import userRoutes from './routes/userRoute.js';
 
 // Caricare le variabili di ambiente
 dotenv.config();
@@ -28,6 +31,12 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
+// Rotte principali
+app.use('/api/galleries', galleryRoutes);
+app.use('/api/users', userRoutes);
+
 // Avviare il server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+export default app;
