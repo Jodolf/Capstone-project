@@ -80,4 +80,4 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export default{registerUser, loginUser, getUserProfile};
+export {registerUser, loginUser, getUserProfile};

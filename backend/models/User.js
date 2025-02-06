@@ -14,9 +14,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: String,
+    enum: ['user', 'gallery_owner', 'admin'], // Possibili ruoli
+    default: 'user', // Ruolo predefinito
   },
   images: [String],
 });

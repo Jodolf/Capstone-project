@@ -49,7 +49,7 @@ const getEventById = async (req, res) => {
 };
 
 // Aggiorna un evento
-export const updateEvent = async (req, res) => {
+const updateEvent = async (req, res) => {
   const { id } = req.params;
   const { title, description, date, endDate, location, images, cost } = req.body;
 
@@ -71,7 +71,7 @@ export const updateEvent = async (req, res) => {
 };
 
 // Elimina un evento
-export const deleteEvent = async (req, res) => {
+const deleteEvent = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -87,4 +87,4 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
-export default { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent };
+export { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent };
