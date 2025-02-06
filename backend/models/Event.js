@@ -1,0 +1,44 @@
+import mongoose from 'mongoose';
+
+const eventSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true, // Il titolo dell'evento è obbligatorio
+    trim: true,
+  },
+  description: {
+    type: String,
+    required: true, // La descrizione dell'evento è obbligatoria
+    trim: true,
+  },
+  gallery: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Gallery', // Collegamento al modello "Gallery"
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true, // La data dell'evento è obbligatoria
+  },
+  endDate: {
+    type: Date, // (Opzionale) La data di fine evento
+  },
+  location: {
+    type: String,
+    required: true, // La posizione può essere diversa da quella della galleria
+  },
+  images: {
+    type: [String], // Array di URL di immagini relative all'evento
+  },
+  cost: {
+    type: Number, // Costo dell'evento
+    default: 0, // Impostato a 0 per eventi gratuiti
+  },
+  isPaid: {
+    type: Boolean,
+    default: false, // Indica se l'evento è a pagamento
+  },
+});
+
+const Event = mongoose.model('Event', eventSchema);
+export default Event;
