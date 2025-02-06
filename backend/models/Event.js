@@ -34,10 +34,6 @@ const eventSchema = new mongoose.Schema({
     type: Number, // Costo dell'evento
     default: 0, // Impostato a 0 per eventi gratuiti
   },
-  isPaid: {
-    type: Boolean,
-    default: false, // Indica se l'evento è a pagamento
-  },
 });
 
 const Event = mongoose.model('Event', eventSchema);
