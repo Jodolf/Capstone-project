@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 
 import galleryRoutes from './routes/galleryRoute.js';
 import userRoutes from './routes/userRoute.js';
+import eventRoutes from './routes/eventRoute.js';
 
 // Caricare le variabili di ambiente
 dotenv.config();
@@ -35,6 +36,8 @@ app.get('/', (req, res) => {
 // Rotte principali
 app.use('/api/galleries', galleryRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/events', eventRoutes);
+
 
 // Avviare il server
 const PORT = process.env.PORT || 3001;
