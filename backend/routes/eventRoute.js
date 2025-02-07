@@ -1,4 +1,6 @@
 import express from 'express';
+import authMiddleware from '../middleware/authMiddleware.js';
+import checkRole from '../middleware/roleMiddleware.js';
 
 import {
   createEvent,
@@ -7,8 +9,6 @@ import {
   updateEvent,
   deleteEvent,
 } from '../controllers/eventController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
-import checkRole from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
 

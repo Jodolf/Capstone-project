@@ -1,7 +1,8 @@
 import express from 'express';
-import { getAllGalleries, createGallery } from '../controllers/galleryController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import checkRole from '../middleware/roleMiddleware.js';
+
+import { getAllGalleries, createGallery } from '../controllers/galleryController.js';
 
 const router = express.Router();
 

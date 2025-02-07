@@ -16,10 +16,16 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'gallery_owner', 'admin'], // Possibili ruoli
-    default: 'user', // Ruolo predefinito
+    enum: ["user", "gallery_owner", "admin"], // Possibili ruoli
+    default: "user", // Ruolo predefinito
   },
   images: [String],
+  savedEvents: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event", // Collegamento al modello Event
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
