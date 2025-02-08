@@ -6,6 +6,7 @@ import {
   createEvent,
   getAllEvents,
   getEventById,
+  getEventsByType,
   updateEvent,
   deleteEvent,
 } from '../controllers/eventController.js';
@@ -20,6 +21,9 @@ router.get('/', getAllEvents);
 
 // Rotta per ottenere un evento specifico
 router.get('/:id', getEventById);
+
+// Rotta per ottenere un evento specifico in base al tipo
+router.get("/type", getEventsByType); 
 
 // Rotta per aggiornare un evento (accessibile solo ai galleristi)
 router.put('/:id', authMiddleware, checkRole(['gallery_owner']), updateEvent);

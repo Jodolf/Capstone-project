@@ -27,6 +27,19 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true, // La posizione può essere diversa da quella della galleria
   },
+    /*latitude: {
+    type: Number,
+    required: true,
+  },
+  longitude: {
+    type: Number,
+    required: true,
+  },*/
+  type: {
+    type: String,
+    enum: ["exhibition", "performance", "music", "workshop"], // Tipi di evento accettati
+    required: true, // Campo obbligatorio
+  },
   images: {
     type: [String], // Array di URL di immagini relative all'evento
   },

@@ -12,6 +12,9 @@ const createEvent = async (req, res) => {
       date,
       endDate,
       location,
+      /* latitude,
+       longitude,*/
+      type,
       images,
       cost,
     });
@@ -48,6 +51,25 @@ const getEventById = async (req, res) => {
   }
 };
 
+// Ottieni eventi filtrati per tipo
+const getEventsByType = async (req, res) => {
+  const { type } = req.query; // Recupera il parametro 'type' dalla query string
+
+  try {
+    // Verifica che il tipo sia stato fornito
+    if (!type) {
+      return res.status(400).json({ message: 'Il tipo di evento è obbligatorio per questo endpoint' });
+    }
+
+    // Filtra gli eventi in base al tipo
+    const events = await Event.find({ type }).populate('gallery', 'name location');
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: 'Errore durante il recupero degli eventi per tipo', error });
+  }
+};
+
+
 // Aggiorna un evento
 const updateEvent = async (req, res) => {
   const { id } = req.params;
@@ -56,7 +78,7 @@ const updateEvent = async (req, res) => {
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
-      { title, description, date, endDate, location, images, cost },
+      { title, description, date, endDate, location, type, images, cost },
       { new: true }
     );
 
@@ -87,4 +109,4 @@ const deleteEvent = async (req, res) => {
   }
 };
 
-export { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent };
+export { createEvent, getAllEvents, getEventById, getEventsByType, updateEvent, deleteEvent };
