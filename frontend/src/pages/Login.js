@@ -24,12 +24,15 @@ const Login = () => {
       if (!response.ok) throw new Error(data.message || "Login fallito");
       
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user)); // ✅ Salva i dati dell'utente nel localStorage
+  
       navigate("/profile");
     } catch (error) {
       setError(error.message);
     }
   };
-
+  
+  
   return (
     <div className="container mt-4">
       <h2>Login</h2>

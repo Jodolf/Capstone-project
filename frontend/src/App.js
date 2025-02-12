@@ -14,7 +14,7 @@ import Register from "./pages/Register";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token"); // Controlla se l'utente è loggato
-  return token ? children : <Navigate to="/login" />; // ✅ Navigate ora è importato correttamente
+  return token ? children : <Navigate to="/login" />; //  Navigate ora è importato correttamente
 };
 
 function App() {
@@ -27,23 +27,22 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/galleries" element={<Galleries />} />
           <Route path="/favorites" element={<Favorites />} />
+          
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route
             path="/profile"
             element={
               <PrivateRoute>
-                <UserProfile />
+                {localStorage.getItem("user") &&
+                JSON.parse(localStorage.getItem("user")).role === "gallery_owner" ? (
+                  <GalleryOwnerProfile />
+                ) : (
+                  <UserProfile />
+                )}
               </PrivateRoute>
-            }
-          />
-          <Route
-            path="/gallery-owner"
-            element={
-              <PrivateRoute>
-                <GalleryOwnerProfile />
-              </PrivateRoute>
-            }
+            }          
           />
         </Routes>
       </div>

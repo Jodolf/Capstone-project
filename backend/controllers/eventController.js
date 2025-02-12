@@ -2,9 +2,11 @@ import Event from '../models/Event.js';
 
 // Crea un nuovo evento
 const createEvent = async (req, res) => {
-  const { title, description, gallery, date, endDate, location, images, cost } = req.body;
+  const { title, description, gallery, date, endDate, location, type, images, cost } = req.body;
 
   try {
+    console.log(" Dati ricevuti dal frontend:", req.body); //  Log per vedere i dati ricevuti
+
     const newEvent = new Event({
       title,
       description,
@@ -12,9 +14,7 @@ const createEvent = async (req, res) => {
       date,
       endDate,
       location,
-      /* latitude,
-       longitude,*/
-      type,
+      type, 
       images,
       cost,
     });
@@ -22,7 +22,8 @@ const createEvent = async (req, res) => {
     const savedEvent = await newEvent.save();
     res.status(201).json(savedEvent);
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante la creazione dell\'evento', error });
+    console.error("ERRORE durante la creazione dell'evento:", error); // Log dettagliato
+    res.status(500).json({ message: "Errore durante la creazione dell'evento", error: error.message });
   }
 };
 

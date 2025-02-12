@@ -4,7 +4,7 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState([]); // Inizializzato come array vuoto
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/users/saved-events", {
+    fetch("http://localhost:3001/api/users/saved-events", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, // Assicurati che il token sia salvato correttamente
