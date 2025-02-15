@@ -24,7 +24,7 @@ const Login = () => {
       if (!response.ok) throw new Error(data.message || "Login fallito");
       
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user)); // ✅ Salva i dati dell'utente nel localStorage
+      localStorage.setItem("user", JSON.stringify(data.user)); //  Salva i dati dell'utente nel localStorage
   
       navigate("/profile");
     } catch (error) {

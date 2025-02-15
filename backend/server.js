@@ -9,6 +9,8 @@ import galleryRoutes from './routes/galleryRoute.js';
 import userRoutes from './routes/userRoute.js';
 import eventRoutes from './routes/eventRoute.js';
 
+import authMiddleware from "./middleware/authMiddleware.js";
+
 // Caricare le variabili di ambiente
 dotenv.config();
 

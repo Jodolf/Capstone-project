@@ -13,6 +13,7 @@ const gallerySchema = new mongoose.Schema({
     required: true,
   },*/
   images: [String],
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
 });
 
 const Gallery = mongoose.model("Gallery", gallerySchema);

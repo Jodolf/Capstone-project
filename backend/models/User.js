@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
       ref: "Event", // Collegamento al modello Event
     },
   ],
+  ownedGalleries: [{ type: mongoose.Schema.Types.ObjectId, ref: "Gallery" }]
 });
 
 const User = mongoose.model("User", userSchema);

@@ -18,6 +18,7 @@ const createEvent = async (req, res) => {
       images,
       cost,
     });
+    console.log(" Dati ricevuti dal frontend:", req.body);
 
     const savedEvent = await newEvent.save();
     res.status(201).json(savedEvent);
@@ -70,26 +71,55 @@ const getEventsByType = async (req, res) => {
   }
 };
 
+// Ottieni tutti gli eventi di una specifica galleria
+const getEventsByGallery = async (req, res) => {
+  try {
+    const { galleryId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(galleryId)) {
+      return res.status(400).json({ message: "ID galleria non valido" });
+    }
+
+    const events = await Event.find({ gallery: galleryId }).populate("gallery", "name location");
+
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: "Errore durante il recupero degli eventi", error });
+  }
+};
 
 // Aggiorna un evento
 const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const { title, description, date, endDate, location, images, cost } = req.body;
+  const { title, description, date, endDate, location, type, cost } = req.body;
 
   try {
-    const updatedEvent = await Event.findByIdAndUpdate(
-      id,
-      { title, description, date, endDate, location, type, images, cost },
-      { new: true }
-    );
+    console.log("🔍 Dati ricevuti per l'aggiornamento:", req.body); // <-- Debug
 
-    if (!updatedEvent) {
-      return res.status(404).json({ message: 'Evento non trovato' });
+    // Controlliamo se l'evento esiste prima di aggiornare
+    let event = await Event.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Evento non trovato" });
     }
 
-    res.status(200).json(updatedEvent);
+    // Controlliamo che tutti i campi necessari siano presenti
+    if (!title || !description || !date || !location || !type) {
+      return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
+    }
+
+    // Se `cost` è vuoto o non è un numero, settiamo a 0
+    const eventCost = cost ? parseFloat(cost) : 0;
+
+    event = await Event.findByIdAndUpdate(
+      id,
+      { title, description, date, endDate, location, type, cost: eventCost },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json(event);
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante l\'aggiornamento dell\'evento', error });
+    console.error("❌ Errore durante l'aggiornamento:", error);
+    res.status(500).json({ message: "Errore durante l'aggiornamento dell'evento", error });
   }
 };
 
@@ -110,4 +140,4 @@ const deleteEvent = async (req, res) => {
   }
 };
 
-export { createEvent, getAllEvents, getEventById, getEventsByType, updateEvent, deleteEvent };
+export { createEvent, getAllEvents, getEventById, getEventsByType, getEventsByGallery, updateEvent, deleteEvent };

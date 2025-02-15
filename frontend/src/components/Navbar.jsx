@@ -7,7 +7,7 @@ import ProfileModal from "./ProfileModal";
 function MainNavbar() {
   const [showModal, setShowModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null); // ✅ Aggiunto per controllare il ruolo
+  const [userRole, setUserRole] = useState(null); // Aggiunto per controllare il ruolo
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function MainNavbar() {
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="/">WHERE THE FUCK ARE THE</Navbar.Brand>
+          <Navbar.Brand href="/">WHERE ARE THE</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -45,7 +45,7 @@ function MainNavbar() {
                 <Nav.Link href="/favorites">THINGS I LOOK FORWARD TO</Nav.Link>
               )}
               {isAuthenticated && userRole === "gallery_owner" && (
-                <Nav.Link href="/manage-gallery">GESTIONE GALLERIA</Nav.Link>
+                <Nav.Link href="/manage-gallery">MANAGE</Nav.Link>
               )}
               {isAuthenticated ? (
                 <>

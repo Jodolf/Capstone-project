@@ -9,6 +9,8 @@ import Galleries from "./pages/Galleries";
 import Favorites from "./pages/Favorites.js";
 import UserProfile from "./pages/UserProfile";
 import GalleryOwnerProfile from "./pages/GalleryOwnerProfile";
+import ManageGallery from "./pages/ManageGallery"; // ✅ Importata la gestione galleria
+import EventDetails from "./pages/EventDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -27,7 +29,8 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/galleries" element={<Galleries />} />
           <Route path="/favorites" element={<Favorites />} />
-          
+          <Route path="/manage-gallery/:galleryId" element={<ManageGallery />} />
+          <Route path="/event/:eventId" element={<EventDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
