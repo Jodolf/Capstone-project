@@ -27,14 +27,14 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true, // La posizione può essere diversa da quella della galleria
   },
-    /*latitude: {
+    latitude: {
     type: Number,
     required: true,
   },
   longitude: {
     type: Number,
     required: true,
-  },*/
+  },
   type: {
     type: String,
     enum: ["exhibition", "performance", "music", "workshop"], // Tipi di evento accettati
