@@ -9,7 +9,7 @@ import galleryRoutes from './routes/galleryRoute.js';
 import userRoutes from './routes/userRoute.js';
 import eventRoutes from './routes/eventRoute.js';
 
-import authMiddleware from "./middleware/authMiddleware.js";
+import uploadRoutes from "./routes/uploadRoute.js"; // Aggiunta della route per upload
 
 // Caricare le variabili di ambiente
 dotenv.config();
@@ -23,6 +23,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json()); // Per leggere JSON nel body delle richieste
+app.use(express.urlencoded({ extended: true }));
 
 // Database Connection
 mongoose
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
 app.use('/api/galleries', galleryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
+app.use("/api/upload", uploadRoutes); // Uso della route di upload
 
 
 // Avviare il server

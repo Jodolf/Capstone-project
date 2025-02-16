@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     default: "user", // Ruolo predefinito
   },
   images: [String],
+  profileImage: { type: String, default: "/uploads/default-avatar.png" }, // Immagine di default
   savedEvents: [
     {
       type: mongoose.Schema.Types.ObjectId,

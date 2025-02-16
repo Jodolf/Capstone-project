@@ -1,34 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
-
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import ProfileModal from "./ProfileModal";
 
 function MainNavbar() {
   const [showModal, setShowModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Aggiunto per controllare il ruolo
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Controlla se l'utente è loggato e recupera il ruolo
+  // Funzione per aggiornare lo stato dell'utente
+  const updateAuthState = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
-      const user = JSON.parse(localStorage.getItem("user")); // Assicurati di salvare il ruolo nel localStorage al login
+      const user = JSON.parse(localStorage.getItem("user"));
       setUserRole(user?.role);
     } else {
       setIsAuthenticated(false);
       setUserRole(null);
     }
+  };
+
+  // Aggiorniamo lo stato all'avvio dell'app e dopo ogni login/logout
+  useEffect(() => {
+    updateAuthState();
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Rimuove il token dal localStorage
-    localStorage.removeItem("user"); // Rimuove i dati utente
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setIsAuthenticated(false);
     setUserRole(null);
-    navigate("/"); // Reindirizza alla home dopo il logout
+    navigate("/");
+    window.location.reload(); // 🔄 Ricarica la pagina per resettare lo stato
+  };
+
+  const handleProfileClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/profile");
+    } else {
+      setShowModal(true);
+    }
   };
 
   return (
@@ -41,19 +55,24 @@ function MainNavbar() {
             <Nav className="me-auto">
               <Nav.Link href="/events">EVENTS</Nav.Link>
               <Nav.Link href="/galleries">GALLERIES</Nav.Link>
+              
               {isAuthenticated && userRole === "user" && (
                 <Nav.Link href="/favorites">THINGS I LOOK FORWARD TO</Nav.Link>
               )}
-              {isAuthenticated && userRole === "gallery_owner" && (
+
+              {/*{isAuthenticated && userRole === "gallery_owner" && (
                 <Nav.Link href="/manage-gallery">MANAGE</Nav.Link>
-              )}
+              )}*/}
+
               {isAuthenticated ? (
                 <>
-                  <Nav.Link href="/profile">PROFILE</Nav.Link>
-                  <Button variant="danger" onClick={handleLogout} className="ms-2">Logout</Button>
+                  <Nav.Link onClick={handleProfileClick}>PROFILE</Nav.Link>
+                  <Button variant="danger" onClick={handleLogout} className="ms-2">
+                    Logout
+                  </Button>
                 </>
               ) : (
-                <Nav.Link onClick={() => setShowModal(true)}>PROFILE</Nav.Link>
+                <Nav.Link onClick={handleProfileClick}>PROFILE</Nav.Link>
               )}
             </Nav>
           </Navbar.Collapse>

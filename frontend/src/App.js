@@ -31,6 +31,7 @@ function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/manage-gallery/:galleryId" element={<ManageGallery />} />
           <Route path="/event/:eventId" element={<EventDetails />} />
+          
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
