@@ -29,11 +29,14 @@ const Events = () => {
     if (isAuthenticated) {
       const fetchSavedEvents = async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/users/saved-events", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await fetch(
+            "http://localhost:3001/api/users/saved-events",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           const data = await response.json();
-          setSavedEvents(new Set(data.map(event => event._id))); // Salviamo gli ID degli eventi preferiti
+          setSavedEvents(new Set(data.map((event) => event._id))); // Salviamo gli ID degli eventi preferiti
         } catch (error) {
           console.error("Errore nel recupero degli eventi salvati", error);
         }
@@ -54,14 +57,17 @@ const Events = () => {
     const method = isSaved ? "DELETE" : "POST";
 
     try {
-      const response = await fetch(`http://localhost:3001/api/users/${endpoint}`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ eventId }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/users/${endpoint}`,
+        {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ eventId }),
+        }
+      );
 
       if (!response.ok) throw new Error("Errore nella gestione dei preferiti");
 
@@ -95,7 +101,17 @@ const Events = () => {
                   onClick={() => toggleFavorite(event._id)}
                   className="text-warning"
                 >
-                  {savedEvents.has(event._id) ? <FaStar size={24} /> : <FaRegStar size={24} />}
+                  {savedEvents.has(event._id) ? (
+                    <FaStar size={24} />
+                  ) : (
+                    <FaRegStar size={24} />
+                  )}
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => navigate(`/event/${event._id}`)}
+                >
+                  Dettagli Evento
                 </Button>
               </Card.Body>
             </Card>
@@ -108,7 +124,9 @@ const Events = () => {
         <Modal.Header closeButton>
           <Modal.Title>Accedi per salvare gli eventi</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Devi effettuare il login per aggiungere eventi ai preferiti.</Modal.Body>
+        <Modal.Body>
+          Devi effettuare il login per aggiungere eventi ai preferiti.
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Chiudi

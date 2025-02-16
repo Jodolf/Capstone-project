@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Form, Button, Container } from "react-bootstrap";
+import { Card, Container, Button } from "react-bootstrap";
 
 const EventDetails = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const userRole = localStorage.getItem("userRole"); // Recupera il ruolo dell'utente
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/events/${eventId}`
-        );
+        const response = await fetch(`http://localhost:3001/api/events/${eventId}`);
         if (!response.ok) throw new Error("Evento non trovato");
         const data = await response.json();
         setEvent(data);
@@ -26,126 +24,64 @@ const EventDetails = () => {
     fetchEvent();
   }, [eventId]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEvent((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleUpdateEvent = async (e) => {
-    e.preventDefault();
-    setError(null);
-  
+  const handleDeleteEvent = async () => {
+    if (!window.confirm("Sei sicuro di voler eliminare questo evento?")) return;
+    
     try {
       const response = await fetch(`http://localhost:3001/api/events/${eventId}`, {
-        method: "PUT",
+        method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({
-          title: event.title,
-          description: event.description,
-          date: event.date,
-          endDate: event.endDate || "",
-          location: event.location,
-          type: event.type,
-          cost: event.cost || 0, // Assicuriamoci che `cost` sia presente
-        }),
       });
-  
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Errore durante l'aggiornamento");
-  
-      setEvent(data);
-      setSuccessMessage("Evento aggiornato con successo!"); // Mostra un messaggio di successo
+
+      if (!response.ok) throw new Error("Errore nell'eliminazione dell'evento");
+
+      alert("Evento eliminato con successo!");
+      navigate("/events"); // Reindirizza alla lista eventi
     } catch (error) {
-      setError(error.message);
+      console.error("Errore durante l'eliminazione:", error);
     }
   };
-  
+
   return (
     <Container className="mt-4">
-      <h2>Modifica Evento</h2>
       {error && <p className="text-danger">{error}</p>}
-      {successMessage && <p className="text-success">{successMessage}</p>}
 
-      {event && (
-        <Form onSubmit={handleUpdateEvent}>
-          <Form.Group className="mb-3">
-            <Form.Label>Titolo Evento</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              value={event.title}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Descrizione</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="description"
-              value={event.description}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Data Inizio</Form.Label>
-            <Form.Control
-              type="date"
-              name="date"
-              value={event.date}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Data Fine</Form.Label>
-            <Form.Control
-              type="date"
-              name="endDate"
-              value={event.endDate || ""}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Posizione</Form.Label>
-            <Form.Control
-              type="text"
-              name="location"
-              value={event.location}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Tipo Evento</Form.Label>
-            <Form.Select
-              name="type"
-              value={event.type}
-              onChange={handleInputChange}
-            >
-              <option value="exhibition">Exhibition</option>
-              <option value="performance">Performance</option>
-              <option value="music">Music</option>
-              <option value="workshop">Workshop</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Costo (€)</Form.Label>
-            <Form.Control
-              type="number"
-              name="cost"
-              value={event.cost || ""}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
+      {event ? (
+        <Card>
+          <Card.Body>
+            <Card.Title>{event.title}</Card.Title>
+            <Card.Text><strong>Descrizione:</strong> {event.description}</Card.Text>
+            <Card.Text><strong>Data:</strong> {new Date(event.date).toLocaleDateString()}</Card.Text>
+            <Card.Text><strong>Posizione:</strong> {event.location}</Card.Text>
+            <Card.Text><strong>Tipo:</strong> {event.type}</Card.Text>
+            <Card.Text><strong>Costo:</strong> {event.cost > 0 ? `${event.cost}€` : "Gratis"}</Card.Text>
 
-          <Button type="submit">Aggiorna Evento</Button>
-        </Form>
+            {/* Aggiungi il link alla galleria associata */}
+            {event.gallery && (
+              <Card.Text>
+                <strong>Galleria:</strong>{" "}
+                <span
+                  onClick={() => navigate(`/gallery/${event.gallery._id}`)}
+                  style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+                >
+                  {event.gallery.name}
+                </span>
+              </Card.Text>
+            )}
+
+            {/* Mostra i pulsanti solo se l'utente è un Gallerista */}
+            {userRole === "gallery_owner" && (
+              <>
+                <Button variant="primary" onClick={() => navigate(`/edit-event/${eventId}`)}>✏ Modifica</Button>
+                <Button variant="danger" className="ms-2" onClick={handleDeleteEvent}>🗑 Elimina</Button>
+              </>
+            )}
+          </Card.Body>
+        </Card>
+      ) : (
+        <p>Caricamento in corso...</p>
       )}
     </Container>
   );

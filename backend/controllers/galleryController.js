@@ -15,13 +15,18 @@ const getAllGalleries = async (req, res) => {
 // Mostra solo le gallerie dell'utente loggato
 const getOwnedGalleries = async (req, res) => {
   try {
+    console.log("🔑 Utente autenticato:", req.user);
+
     if (!req.user || req.user.role !== "gallery_owner") {
       return res.status(403).json({ error: "Accesso negato" });
     }
 
     const galleries = await Gallery.find({ owner: req.user.id });
+    console.log("📥 Gallerie trovate:", galleries);
+
     res.status(200).json(galleries);
   } catch (error) {
+    console.error("❌ Errore nel recupero delle gallerie:", error);
     res.status(500).json({ message: "Errore nel recupero delle gallerie", error });
   }
 };
@@ -77,5 +82,42 @@ const getGalleryById = async (req, res) => {
   }
 };
 
+const updateGallery = async (req, res) => {
+  const { id } = req.params;
+  const { name, description, location } = req.body;
 
-export { getAllGalleries, createGallery, getOwnedGalleries, getGalleryById };
+  try {
+    const updatedGallery = await Gallery.findByIdAndUpdate(
+      id,
+      { name, description, location },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedGallery) {
+      return res.status(404).json({ message: "Galleria non trovata" });
+    }
+
+    res.status(200).json(updatedGallery);
+  } catch (error) {
+    res.status(500).json({ message: "Errore durante l'aggiornamento della galleria", error });
+  }
+};
+
+const deleteGallery = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedGallery = await Gallery.findByIdAndDelete(id);
+
+    if (!deletedGallery) {
+      return res.status(404).json({ message: "Galleria non trovata" });
+    }
+
+    res.status(200).json({ message: "Galleria eliminata con successo" });
+  } catch (error) {
+    res.status(500).json({ message: "Errore durante l'eliminazione della galleria", error });
+  }
+};
+
+
+export { getAllGalleries, createGallery, getOwnedGalleries, getGalleryById, updateGallery, deleteGallery };

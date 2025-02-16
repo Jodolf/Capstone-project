@@ -1,209 +1,177 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Form, Button, Container } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { Container, ListGroup, Form, Button, Alert } from "react-bootstrap";
+import CreateEvent from "../components/CreateEvent";
 
 const ManageGallery = () => {
-  const { galleryId } = useParams();
+  const { id: galleryId } = useParams();
+  const navigate = useNavigate();
   const [gallery, setGallery] = useState(null);
   const [events, setEvents] = useState([]);
-  const [newEvent, setNewEvent] = useState({
-    title: "",
-    description: "",
-    date: "",
-    endDate: "",
-    type: "exhibition",
-    location: "",
-    cost: "",
-  });
-  const [error, setError] = useState(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchGallery = async () => {
+    const fetchGalleryAndEvents = async () => {
+      if (!galleryId) {
+        console.error("❌ Nessun ID di galleria fornito.");
+        return;
+      }
+
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/galleries/${galleryId}`
-        );
-        const data = await response.json();
-        setGallery(data);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("❌ Nessun token trovato.");
+          return;
+        }
+
+        // Recupera dettagli della galleria
+        const galleryResponse = await fetch(`http://localhost:3001/api/galleries/${galleryId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!galleryResponse.ok) throw new Error("Errore nel recupero della galleria");
+        const galleryData = await galleryResponse.json();
+        setGallery(galleryData);
+        setName(galleryData.name);
+        setDescription(galleryData.description);
+        setLocation(galleryData.location);
+
+        // Recupera eventi associati alla galleria
+        const eventsResponse = await fetch(`http://localhost:3001/api/events/gallery/${galleryId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!eventsResponse.ok) throw new Error("Errore nel recupero degli eventi");
+        const eventsData = await eventsResponse.json();
+        setEvents(eventsData);
+
       } catch (error) {
-        console.error("Errore nel recupero della galleria:", error);
+        console.error("❌ Errore:", error);
       }
     };
 
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/api/events?gallery=${galleryId}`
-        );
-        const data = await response.json();
-        setEvents(data);
-      } catch (error) {
-        console.error("Errore nel recupero degli eventi:", error);
-      }
-    };
-
-    fetchGallery();
-    fetchEvents();
+    fetchGalleryAndEvents();
   }, [galleryId]);
 
-  const handleInputChange = (e) => {
-    setNewEvent({ ...newEvent, [e.target.name]: e.target.value });
-  };
-
-  const handleCreateEvent = async (e) => {
+  // Funzione per aggiornare la galleria
+  const handleUpdateGallery = async (e) => {
     e.preventDefault();
     setError(null);
-    setSuccessMessage(null);
 
     try {
-      const response = await fetch("http://localhost:3001/api/events", {
-        method: "POST",
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3001/api/galleries/${gallery._id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...newEvent,
-          gallery: galleryId, // Associa automaticamente l'evento alla galleria
-        }),
+        body: JSON.stringify({ name, description, location }),
       });
 
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.message || "Errore nella creazione dell'evento");
+      if (!response.ok) throw new Error(data.message || "Errore durante l'aggiornamento");
 
-      setSuccessMessage("Evento creato con successo!");
-      setEvents([...events, data]); // Aggiorna la lista degli eventi mostrata nella UI
-      setNewEvent({
-        title: "",
-        description: "",
-        date: "",
-        endDate: "",
-        type: "exhibition",
-        location: "",
-        cost: "",
-      });
+      setSuccessMessage("Galleria aggiornata con successo!");
+      setGallery(data);
     } catch (error) {
-      setError(error.message);
+      setError("Errore durante l'aggiornamento della galleria");
+      console.error(error);
     }
   };
 
-  if (!gallery) return <p>Caricamento...</p>;
+  // Funzione per eliminare la galleria
+  const handleDeleteGallery = async () => {
+    if (!window.confirm("Sei sicuro di voler eliminare questa galleria? Questa azione è irreversibile.")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3001/api/galleries/${gallery._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Errore durante l'eliminazione della galleria");
+
+      alert("Galleria eliminata con successo!");
+      navigate("/manage-galleries"); // Reindirizza alla lista delle gallerie
+    } catch (error) {
+      console.error("Errore durante l'eliminazione della galleria:", error);
+    }
+  };
 
   return (
     <Container className="mt-4">
-      <h2>Gestisci {gallery.name}</h2>
+      <h2>Gestione Galleria</h2>
+      {gallery ? (
+        <>
+          <h3>{gallery.name}</h3>
+          <p>Posizione: {gallery.location}</p>
 
-      {/* Form per la modifica della galleria */}
-      <Form>
-        <Form.Group className="mb-3">
-          <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" value={gallery.name} readOnly />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Posizione</Form.Label>
-          <Form.Control type="text" value={gallery.location} readOnly />
-        </Form.Group>
-      </Form>
+          {/* Form per Modificare la Galleria */}
+          <h3>Modifica Galleria</h3>
+          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+          {error && <Alert variant="danger">{error}</Alert>}
 
-      {/* Lista degli eventi */}
-      <h3>Eventi</h3>
-      <ul>
-        {events.map((event) => (
-          <li key={event._id}>
-            <Link to={`/event/${event._id}`}>
-              {event.title} - {event.date}
-            </Link>
-          </li>
-        ))}
-      </ul>
+          <Form onSubmit={handleUpdateGallery}>
+            <Form.Group className="mb-3">
+              <Form.Label>Nome Galleria</Form.Label>
+              <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            </Form.Group>
 
-      {/* Form separato per la creazione di un evento */}
-      <h3>Aggiungi un Nuovo Evento</h3>
-      {error && <p className="text-danger">{error}</p>}
-      {successMessage && <p className="text-success">{successMessage}</p>}
+            <Form.Group className="mb-3">
+              <Form.Label>Descrizione</Form.Label>
+              <Form.Control as="textarea" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            </Form.Group>
 
-      <Form onSubmit={handleCreateEvent}>
-        <Form.Group>
-          <Form.Label>Galleria</Form.Label>
-          <Form.Control type="text" value={galleryId} readOnly />
-        </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Posizione</Form.Label>
+              <Form.Control type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
+            </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Titolo Evento</Form.Label>
-          <Form.Control
-            type="text"
-            name="title"
-            value={newEvent.title}
-            onChange={handleInputChange}
-            required
+            <Button type="submit">Salva Modifiche</Button>
+          </Form>
+
+          {/* Pulsante per Eliminare la Galleria */}
+          <Button variant="danger" className="mt-3" onClick={handleDeleteGallery}>🗑 Elimina Galleria</Button>
+
+        </>
+      ) : (
+        <p>Caricamento della galleria...</p>
+      )}
+
+      <h3>Eventi Associati</h3>
+      {events.length > 0 ? (
+        <ListGroup>
+          {events.map((event) => (
+            <ListGroup.Item key={event._id}>
+              <Link to={`/event/${event._id}`} style={{ textDecoration: "none" }}>
+                <strong>{event.title}</strong> - {new Date(event.date).toLocaleDateString()}
+              </Link>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      ) : (
+        <p>Nessun evento trovato.</p>
+      )}
+
+      {gallery && (
+        <>
+          <h3>Crea un Nuovo Evento</h3>
+          <CreateEvent 
+            onEventCreated={(newEvent) => setEvents([...events, newEvent])} 
+            galleryId={gallery._id} 
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Descrizione</Form.Label>
-          <Form.Control
-            as="textarea"
-            name="description"
-            value={newEvent.description}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Data Inizio</Form.Label>
-          <Form.Control
-            type="date"
-            name="date"
-            value={newEvent.date}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Data Fine</Form.Label>
-          <Form.Control
-            type="date"
-            name="endDate"
-            value={newEvent.endDate}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Posizione</Form.Label>
-          <Form.Control
-            type="text"
-            name="location"
-            value={newEvent.location}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Tipo Evento</Form.Label>
-          <Form.Select
-            name="type"
-            value={newEvent.type}
-            onChange={handleInputChange}
-          >
-            <option value="exhibition">Exhibition</option>
-            <option value="performance">Performance</option>
-            <option value="music">Music</option>
-            <option value="workshop">Workshop</option>
-          </Form.Select>
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Costo (€)</Form.Label>
-          <Form.Control
-            type="number"
-            name="cost"
-            value={newEvent.cost}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Button type="submit">Crea Evento</Button>
-      </Form>
+        </>
+      )}
     </Container>
   );
 };
+
 export default ManageGallery;

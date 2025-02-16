@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
+  const navigate = useNavigate(); // Aggiunto per la navigazione
 
   useEffect(() => {
     fetch("http://localhost:3001/api/users/saved-events", {
@@ -33,7 +35,7 @@ const Favorites = () => {
       ) : (
         <ul>
           {favorites.map((event) => (
-            <li key={event._id}>
+            <li key={event._id} onClick={() => navigate(`/event/${event._id}`)} style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
               <h3>{event.title}</h3>
               <p>{event.description}</p>
             </li>

@@ -40,21 +40,18 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Trova l'utente tramite email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "Utente non trovato" });
     }
 
-    // Confronta la password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Password non corretta" });
     }
 
-    // Genera il token JWT
     const token = jwt.sign(
-      { id: user._id, role: user.role }, // Includiamo il ruolo nel token
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

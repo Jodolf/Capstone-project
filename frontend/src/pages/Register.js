@@ -7,34 +7,35 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
-    
+  
     try {
       const response = await fetch("http://localhost:3001/api/users/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role }),
       });
-      
+  
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Registrazione fallita");
-      
-      navigate("/login");
+  
+      setSuccessMessage("Registrazione completata! Ora puoi accedere.");
+      setTimeout(() => navigate("/login"), 2000); // Redirige dopo 2 secondi
     } catch (error) {
       setError(error.message);
     }
   };
-
-  return (
+    return (
     <div className="container mt-4">
       <h2>Registrati</h2>
       {error && <p className="text-danger">{error}</p>}
+      {successMessage && <p className="text-success">{successMessage}</p>}
+
       <form onSubmit={handleRegister}>
         <div className="mb-3">
           <label>Nome</label>

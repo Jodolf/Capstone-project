@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Event from '../models/Event.js';
 
 // Crea un nuovo evento
@@ -76,15 +77,21 @@ const getEventsByGallery = async (req, res) => {
   try {
     const { galleryId } = req.params;
 
+    console.log("🔍 ID ricevuto per il recupero eventi:", galleryId);
+
     if (!mongoose.Types.ObjectId.isValid(galleryId)) {
+      console.error("❌ ID galleria non valido:", galleryId);
       return res.status(400).json({ message: "ID galleria non valido" });
     }
 
     const events = await Event.find({ gallery: galleryId }).populate("gallery", "name location");
 
+    console.log("📦 Eventi trovati:", events);
+
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ message: "Errore durante il recupero degli eventi", error });
+    console.error("❌ Errore nel recupero eventi:", error);
+    res.status(500).json({ message: "Errore durante il recupero degli eventi", error: error.message });
   }
 };
 
