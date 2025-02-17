@@ -4,23 +4,9 @@ import Event from "../models/Event.js";
 // Crea un nuovo evento
 const createEvent = async (req, res) => {
   const { title, description, date, location, type, cost, latitude, longitude, gallery } = req.body;
-  const owner = req.user.id;
-
-  console.log("📌 Dati ricevuti dal frontend:", req.body);
+  const owner = req.user.id; // 🔥 Assicuriamoci di salvare l'owner
 
   try {
-    if (!gallery) {
-      console.error("❌ ID galleria mancante nel backend!");
-      return res.status(400).json({ message: "ID galleria mancante" });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(gallery)) {
-      console.error("❌ ID galleria non valido!");
-      return res.status(400).json({ message: "ID galleria non valido" });
-    }
-
-    const galleryObjectId = new mongoose.Types.ObjectId(gallery);
-
     const newEvent = new Event({
       title,
       description,
@@ -30,15 +16,13 @@ const createEvent = async (req, res) => {
       cost,
       latitude,
       longitude,
-      gallery: galleryObjectId,
-      owner,
+      gallery,
+      owner, // 🔥 Assicuriamoci che l'owner venga salvato
     });
 
     const savedEvent = await newEvent.save();
-    console.log("✅ Evento salvato con successo:", savedEvent);
     res.status(201).json(savedEvent);
   } catch (error) {
-    console.error("❌ Errore durante la creazione dell'evento:", error);
     res.status(500).json({ message: "Errore durante la creazione dell'evento", error: error.message });
   }
 };
@@ -60,15 +44,20 @@ const getEventById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const event = await Event.findById(id).populate("gallery", "name location");
+    const event = await Event.findById(id)
+      .populate("gallery", "name location")
+      .populate("owner", "_id name"); // 🔥 Assicuriamoci che l'owner sia caricato correttamente
+
     if (!event) {
       return res.status(404).json({ message: "Evento non trovato" });
     }
+
+    console.log("📌 Evento recuperato dal database:", event);
+    console.log("🔍 Owner dell'evento nel database:", event.owner);
+
     res.status(200).json(event);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Errore durante il recupero dell'evento", error });
+    res.status(500).json({ message: "Errore durante il recupero dell'evento", error });
   }
 };
 
@@ -136,39 +125,30 @@ const getEventsByGallery = async (req, res) => {
 // Aggiorna un evento
 const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const { title, description, date, endDate, location, type, cost } = req.body;
+  const userId = req.user.id;
 
   try {
-    console.log("🔍 Dati ricevuti per l'aggiornamento:", req.body); // <-- Debug
-
-    // Controlliamo se l'evento esiste prima di aggiornare
     let event = await Event.findById(id);
+
     if (!event) {
       return res.status(404).json({ message: "Evento non trovato" });
     }
 
-    // Controlliamo che tutti i campi necessari siano presenti
-    if (!title || !description || !date || !location || !type) {
-      return res
-        .status(400)
-        .json({ message: "Tutti i campi sono obbligatori" });
+    console.log("🔍 Proprietario evento:", event.owner ? event.owner.toString() : "Nessun owner");
+    console.log("🔑 Utente loggato:", userId);
+
+    // 🔥 Controllo: solo il proprietario dell'evento può modificarlo
+    if (!event.owner || event.owner.toString() !== userId) {
+      console.error("❌ Tentativo di modifica non autorizzato!");
+      return res.status(403).json({ message: "Non sei autorizzato a modificare questo evento" });
     }
 
-    // Se `cost` è vuoto o non è un numero, settiamo a 0
-    const eventCost = cost ? parseFloat(cost) : 0;
-
-    event = await Event.findByIdAndUpdate(
-      id,
-      { title, description, date, endDate, location, type, cost: eventCost },
-      { new: true, runValidators: true }
-    );
+    event = await Event.findByIdAndUpdate(id, { ...req.body }, { new: true, runValidators: true });
 
     res.status(200).json(event);
   } catch (error) {
-    console.error("❌ Errore durante l'aggiornamento:", error);
-    res
-      .status(500)
-      .json({ message: "Errore durante l'aggiornamento dell'evento", error });
+    console.error("❌ Errore durante l'aggiornamento dell'evento:", error);
+    res.status(500).json({ message: "Errore durante l'aggiornamento dell'evento", error });
   }
 };
 

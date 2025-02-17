@@ -22,8 +22,9 @@ const Login = () => {
       if (!response.ok) throw new Error(data.message || "Login fallito");
   
       localStorage.setItem("token", data.token);
-      localStorage.setItem("userRole", data.user.role); 
-      
+      localStorage.setItem("user", JSON.stringify(data.user)); // ✅ Ora salva l'intero oggetto utente
+      localStorage.setItem("userRole", data.user.role);
+            
       navigate("/");
       window.location.reload(); 
     } catch (error) {

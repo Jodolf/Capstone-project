@@ -47,6 +47,11 @@ const eventSchema = new mongoose.Schema({
     type: Number, // Costo dell'evento
     default: 0, // Impostato a 0 per eventi gratuiti
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // 🔥 Collegamento all'utente proprietario
+    required: true, // 🔥 Assicuriamoci che tutti gli eventi abbiano un owner
+  },
 });
 
 const Event = mongoose.model('Event', eventSchema);

@@ -17,6 +17,7 @@ import UserProfile from "./pages/UserProfile";
 import GalleryOwnerProfile from "./pages/GalleryOwnerProfile";
 
 import ManageGallery from "./pages/ManageGallery"; // ✅ Importata la gestione galleria
+import EditEvent from "./components/EditEvent"; // Importa il componente di modifica evento
 
 import EventDetails from "./pages/EventDetail";
 import GalleryDetail from "./pages/GalleryDetail";
@@ -42,6 +43,7 @@ function App() {
 
           <Route path="/manage-galleries" element={<GalleryOwnerProfile />} />
           <Route path="/manage-gallery/:id" element={<ManageGallery />} />
+          <Route path="/edit-event/:eventId" element={<EditEvent />} />
 
           <Route path="/event/:eventId" element={<EventDetails />} />
           <Route path="/gallery/:galleryId" element={<GalleryDetail />} />
