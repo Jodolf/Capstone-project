@@ -39,29 +39,48 @@ const MainNavbar = () => {
           {isAuthenticated ? (
             <Nav>
               <NavDropdown title="👤 Account" id="user-menu">
-                <NavDropdown.Item href="/profile">Gestione Profilo</NavDropdown.Item>
+                <NavDropdown.Item href="/profile">
+                  Gestione Profilo
+                </NavDropdown.Item>
 
                 {userRole === "user" && (
-                  <NavDropdown.Item href="/favorites">Lista Preferiti</NavDropdown.Item>
+                  <NavDropdown.Item href="/favorites">
+                    Lista Preferiti
+                  </NavDropdown.Item>
                 )}
 
                 {userRole === "gallery_owner" && (
                   <>
-  <NavDropdown.Item as={Link} to="/manage-galleries">Gestione Gallerie</NavDropdown.Item>
-  {/*<NavDropdown.Item href="/manage-events">Gestione Eventi</NavDropdown.Item>*/}
+                    <NavDropdown.Item as={Link} to="/manage-galleries">
+                      Gestione Gallerie
+                    </NavDropdown.Item>
+                    {/*<NavDropdown.Item href="/manage-events">Gestione Eventi</NavDropdown.Item>*/}
                   </>
                 )}
 
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleLogout} className="text-danger">
+                <NavDropdown.Item
+                  onClick={handleLogout}
+                  className="text-danger"
+                >
                   Logout
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           ) : (
             <>
-            <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
-            <Button variant="secondary" className="ms-2" onClick={() => navigate("/register")}>Registrati</Button>
+              <Button
+                className="button-primary"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
+              <Button
+                className="button-primary-outline ms-2"
+                onClick={() => navigate("/register")}
+              >
+                Registrati
+              </Button>
             </>
           )}
         </Navbar.Collapse>

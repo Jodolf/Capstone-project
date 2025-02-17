@@ -1,0 +1,41 @@
+/* Stile principale della card evento */
+.event-detail-card {
+    background: var(--primary-color); /* Bianco */
+    color: var(--background-color); /* Testo nero */
+    border-radius: 0; /* Nessun border-radius */
+    border: 2px solid var(--secondary-color); /* Bordo viola */
+    padding: 20px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .event-detail-card:hover {
+    transform: scale(1.02);
+    border-color: var(--primary-color);
+  }
+  
+  /* Stile del testo */
+  .event-detail-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--background-color);
+    opacity: 0.9;
+  }
+  
+  /* Stile del link alla galleria */
+  .event-gallery-link {
+    cursor: pointer;
+    color: var(--secondary-color);
+    text-decoration: underline;
+  }
+  
+  .event-gallery-link:hover {
+    color: var(--background-color);
+  }
+  
+  /* Pulsanti di modifica ed eliminazione */
+  .event-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  

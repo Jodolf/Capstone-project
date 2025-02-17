@@ -1,18 +1,40 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-const CreateEvent = ({ onEventCreated, galleries = [] }) => {
+const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [gallery, setGallery] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [type, setType] = useState("exhibition"); // Imposta un valore predefinito
   const [cost, setCost] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!galleryId) {
+      console.error("❌ Errore: ID galleria non disponibile.");
+      return;
+    }
+  
+    const eventData = {
+      title,
+      description,
+      gallery: galleryId,
+      date,
+      location,
+      type,
+      cost,
+      latitude,
+      longitude,
+    };
+  
+    console.log("📌 Dati inviati nella richiesta:", eventData); // Debug
+  
     try {
       const response = await fetch("http://localhost:3001/api/events", {
         method: "POST",
@@ -20,14 +42,12 @@ const CreateEvent = ({ onEventCreated, galleries = [] }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ title, description, gallery, date, location }),
+        body: JSON.stringify(eventData), // 🔥 Assicuriamoci che il body sia costruito correttamente
       });
-
+  
       const data = await response.json();
-
-      if (!response.ok)
-        throw new Error(data.message || "Errore nella creazione dell'evento");
-
+      if (!response.ok) throw new Error(data.message || "Errore nella creazione dell'evento");
+  
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
       onEventCreated(data);
@@ -35,7 +55,7 @@ const CreateEvent = ({ onEventCreated, galleries = [] }) => {
       console.error("Errore nella creazione dell'evento:", error);
     }
   };
-
+  
   return (
     <>
       {showAlert && (
@@ -50,22 +70,6 @@ const CreateEvent = ({ onEventCreated, galleries = [] }) => {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Galleria</Form.Label>
-          <Form.Select
-            value={gallery}
-            onChange={(e) => setGallery(e.target.value)}
-            required
-          >
-            <option value="">Seleziona una galleria</option>
-            {galleries.map((g) => (
-              <option key={g._id} value={g._id}>
-                {g.name}
-              </option>
-            ))}
-          </Form.Select>
         </Form.Group>
 
         <Form.Group>
@@ -94,6 +98,25 @@ const CreateEvent = ({ onEventCreated, galleries = [] }) => {
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Latitudine</Form.Label>
+          <Form.Control
+            type="number"
+            value={latitude}
+            onChange={(e) => setLatitude(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Longitudine</Form.Label>
+          <Form.Control
+            type="number"
+            value={longitude}
+            onChange={(e) => setLongitude(e.target.value)}
             required
           />
         </Form.Group>

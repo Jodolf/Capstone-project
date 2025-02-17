@@ -1,30 +1,44 @@
 import mongoose from "mongoose";
-import Event from '../models/Event.js';
+import Event from "../models/Event.js";
 
 // Crea un nuovo evento
 const createEvent = async (req, res) => {
-  const { title, description, gallery, date, endDate, location, type, images, cost } = req.body;
+  const { title, description, date, location, type, cost, latitude, longitude, gallery } = req.body;
+  const owner = req.user.id;
+
+  console.log("📌 Dati ricevuti dal frontend:", req.body);
 
   try {
-    console.log(" Dati ricevuti dal frontend:", req.body); //  Log per vedere i dati ricevuti
+    if (!gallery) {
+      console.error("❌ ID galleria mancante nel backend!");
+      return res.status(400).json({ message: "ID galleria mancante" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(gallery)) {
+      console.error("❌ ID galleria non valido!");
+      return res.status(400).json({ message: "ID galleria non valido" });
+    }
+
+    const galleryObjectId = new mongoose.Types.ObjectId(gallery);
 
     const newEvent = new Event({
       title,
       description,
-      gallery,
       date,
-      endDate,
       location,
-      type, 
-      images,
+      type,
       cost,
+      latitude,
+      longitude,
+      gallery: galleryObjectId,
+      owner,
     });
-    console.log(" Dati ricevuti dal frontend:", req.body);
 
     const savedEvent = await newEvent.save();
+    console.log("✅ Evento salvato con successo:", savedEvent);
     res.status(201).json(savedEvent);
   } catch (error) {
-    console.error("ERRORE durante la creazione dell'evento:", error); // Log dettagliato
+    console.error("❌ Errore durante la creazione dell'evento:", error);
     res.status(500).json({ message: "Errore durante la creazione dell'evento", error: error.message });
   }
 };
@@ -32,10 +46,12 @@ const createEvent = async (req, res) => {
 // Ottieni tutti gli eventi
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('gallery', 'name location');
+    const events = await Event.find().populate("gallery", "name location");
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante il recupero degli eventi', error });
+    res
+      .status(500)
+      .json({ message: "Errore durante il recupero degli eventi", error });
   }
 };
 
@@ -44,13 +60,15 @@ const getEventById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const event = await Event.findById(id).populate('gallery', 'name location');
+    const event = await Event.findById(id).populate("gallery", "name location");
     if (!event) {
-      return res.status(404).json({ message: 'Evento non trovato' });
+      return res.status(404).json({ message: "Evento non trovato" });
     }
     res.status(200).json(event);
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante il recupero dell\'evento', error });
+    res
+      .status(500)
+      .json({ message: "Errore durante il recupero dell'evento", error });
   }
 };
 
@@ -61,14 +79,26 @@ const getEventsByType = async (req, res) => {
   try {
     // Verifica che il tipo sia stato fornito
     if (!type) {
-      return res.status(400).json({ message: 'Il tipo di evento è obbligatorio per questo endpoint' });
+      return res
+        .status(400)
+        .json({
+          message: "Il tipo di evento è obbligatorio per questo endpoint",
+        });
     }
 
     // Filtra gli eventi in base al tipo
-    const events = await Event.find({ type }).populate('gallery', 'name location');
+    const events = await Event.find({ type }).populate(
+      "gallery",
+      "name location"
+    );
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante il recupero degli eventi per tipo', error });
+    res
+      .status(500)
+      .json({
+        message: "Errore durante il recupero degli eventi per tipo",
+        error,
+      });
   }
 };
 
@@ -84,14 +114,22 @@ const getEventsByGallery = async (req, res) => {
       return res.status(400).json({ message: "ID galleria non valido" });
     }
 
-    const events = await Event.find({ gallery: galleryId }).populate("gallery", "name location");
+    const events = await Event.find({ gallery: galleryId }).populate(
+      "gallery",
+      "name location"
+    );
 
     console.log("📦 Eventi trovati:", events);
 
     res.status(200).json(events);
   } catch (error) {
     console.error("❌ Errore nel recupero eventi:", error);
-    res.status(500).json({ message: "Errore durante il recupero degli eventi", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Errore durante il recupero degli eventi",
+        error: error.message,
+      });
   }
 };
 
@@ -111,7 +149,9 @@ const updateEvent = async (req, res) => {
 
     // Controlliamo che tutti i campi necessari siano presenti
     if (!title || !description || !date || !location || !type) {
-      return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
+      return res
+        .status(400)
+        .json({ message: "Tutti i campi sono obbligatori" });
     }
 
     // Se `cost` è vuoto o non è un numero, settiamo a 0
@@ -126,7 +166,9 @@ const updateEvent = async (req, res) => {
     res.status(200).json(event);
   } catch (error) {
     console.error("❌ Errore durante l'aggiornamento:", error);
-    res.status(500).json({ message: "Errore durante l'aggiornamento dell'evento", error });
+    res
+      .status(500)
+      .json({ message: "Errore durante l'aggiornamento dell'evento", error });
   }
 };
 
@@ -138,13 +180,23 @@ const deleteEvent = async (req, res) => {
     const deletedEvent = await Event.findByIdAndDelete(id);
 
     if (!deletedEvent) {
-      return res.status(404).json({ message: 'Evento non trovato' });
+      return res.status(404).json({ message: "Evento non trovato" });
     }
 
-    res.status(200).json({ message: 'Evento eliminato con successo' });
+    res.status(200).json({ message: "Evento eliminato con successo" });
   } catch (error) {
-    res.status(500).json({ message: 'Errore durante l\'eliminazione dell\'evento', error });
+    res
+      .status(500)
+      .json({ message: "Errore durante l'eliminazione dell'evento", error });
   }
 };
 
-export { createEvent, getAllEvents, getEventById, getEventsByType, getEventsByGallery, updateEvent, deleteEvent };
+export {
+  createEvent,
+  getAllEvents,
+  getEventById,
+  getEventsByType,
+  getEventsByGallery,
+  updateEvent,
+  deleteEvent,
+};

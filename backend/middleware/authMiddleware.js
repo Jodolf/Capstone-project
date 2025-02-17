@@ -21,6 +21,9 @@ const authMiddleware = async (req, res, next) => {
   } else {
     res.status(401).json({ error: "Non autorizzato, nessun token" });
   }
+  console.log("🔑 Token ricevuto:", req.headers.authorization);
+console.log("🔍 Utente autenticato:", req.user);
+
 };
 
 export default authMiddleware;

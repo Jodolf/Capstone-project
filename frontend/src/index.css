@@ -1,13 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0a0a; /* Nero profondo */
+  color: #fff; /* Testo chiaro */
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+
+:root {
+  --primary-color: #ffffff; /* Bianco */
+  --secondary-color: #6E32FF; /* Viola */
+  --background-color: #000000; /* Nero */
+  --border-radius: 12px;
+}
+
+
+
+button {
+  background: var(--accent-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+button:hover {
+  background: #3a7cc0;
+  transform: scale(1.05);
+}
+
+.button-primary,
+.button-primary-outline {
+  display: flex;
+  align-items: center; /* Centra verticalmente il testo */
+  justify-content: center; /* Centra orizzontalmente */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 0;
+  transition: all 0.3s ease-in-out;
+  min-width: 160px;
+  height: 48px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Bottone pieno */
+.button-primary {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+}
+
+.button-primary:hover {
+  background: #5a26cc;
+}
+
+/* Bottone con bordo */
+.button-primary-outline {
+  background: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.button-primary-outline:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border: 1px solid var(--secondary-color);
+  transition: all 0.3s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.02);
+  border: 1px solid var(--primary-color);
+}
+
+
+
+.navbar-custom {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  border-bottom: 2px solid var(--secondary-color);
+}
+.navbar-logo {
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--primary-color);
+}
+.navbar-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  transition: color 0.3s ease-in-out;
+}
+.navbar-link:hover {
+  color: var(--secondary-color);
+}
+
+
+
+.event-list-item {
+  padding: 15px;
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease-in-out;
+}
+.event-list-item:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+
+
+/* Stile pulsante occhio */
+.event-eye-button {
+  color: var(--primary-color); /* Bianco di default */
+  border: none;
+  background: none;
+  font-size: 22px;
+  padding: 8px;
+  transition: color 0.3s ease-in-out;
+}
+/* Cambia colore se l'evento è salvato */
+.event-eye-button.saved {
+  color: var(--secondary-color); /* Viola se salvato */
+}
+.event-eye-button:hover {
+  color: var(--secondary-color);
+  transform: scale(1.1);
 }
