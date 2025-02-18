@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, ListGroup } from "react-bootstrap";
+import { Container, ListGroup, Card, Row, Col } from "react-bootstrap";
+
+import "../styles/GalleryDetail.css";
 
 const GalleryDetail = () => {
   const { galleryId } = useParams();
@@ -34,29 +36,52 @@ const GalleryDetail = () => {
   }, [galleryId]);
 
   return (
-    <Container className="mt-4">
-      {gallery ? (
-        <>
-          <h2>{gallery.name}</h2>
-          <p><strong>Posizione:</strong> {gallery.location}</p>
-          <p>{gallery.description}</p>
-          <h3>Eventi Associati</h3>
-          {events.length > 0 ? (
-            <ListGroup>
-              {events.map((event) => (
-                <ListGroup.Item key={event._id} onClick={() => navigate(`/event/${event._id}`)} style={{ cursor: "pointer", color: "blue" }}>
-                  <strong>{event.title}</strong> - {new Date(event.date).toLocaleDateString()}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          ) : (
-            <p>Nessun evento disponibile.</p>
-          )}
-        </>
+<Container className="gallery-detail-container">
+  {gallery ? (
+    <>
+      <Card>
+        <Card.Img
+          variant="top"
+          className="gallery-detail-image"
+          src={gallery.images.length > 0 ? gallery.images[0] : "https://via.placeholder.com/800x300"}
+          alt={gallery.name}
+        />
+        <Card.Body>
+          <Card.Title className="gallery-detail-title">{gallery.name}</Card.Title>
+          <Card.Text className="gallery-detail-text">
+            <strong>Posizione:</strong> {gallery.location}
+          </Card.Text>
+          <Card.Text className="gallery-detail-text">{gallery.description}</Card.Text>
+        </Card.Body>
+      </Card>
+
+      <h3 className="mt-4">Eventi Associati</h3>
+
+      {events.length > 0 ? (
+        <Row>
+          {events.map((event) => (
+            <Col key={event._id} md={4} className="mb-4">
+              <Card className="event-card" onClick={() => navigate(`/event/${event._id}`)}>
+                <Card.Body>
+                  <Card.Title className="event-card-title">{event.title}</Card.Title>
+                  <Card.Text className="event-card-text">{event.description}</Card.Text>
+                  <Card.Text className="event-card-text">
+                    <strong>Data:</strong> {new Date(event.date).toLocaleDateString()}
+                  </Card.Text>
+                  <button className="button-primary-outline event-card-button">Dettagli Evento</button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       ) : (
-        <p>Caricamento...</p>
+        <p>Nessun evento disponibile.</p>
       )}
-    </Container>
+    </>
+  ) : (
+    <p>Caricamento...</p>
+  )}
+</Container>
   );
 };
 

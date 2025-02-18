@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import "../styles/MapboxMap.css";
+import { Card } from "react-bootstrap";
 
-const MapboxMap = ({ events }) => { // Modificato: ora accetta eventi, non gallerie
+const MapboxMap = ({ events, galleries }) => {
+  // Modificato: ora accetta eventi, non gallerie
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -16,21 +19,89 @@ const MapboxMap = ({ events }) => { // Modificato: ora accetta eventi, non galle
 
     // Aggiungere i marker per gli eventi (invece delle gallerie)
     events.forEach((event) => {
-      if (!event.latitude || !event.longitude || isNaN(event.latitude) || isNaN(event.longitude)) {
+      if (
+        !event.latitude ||
+        !event.longitude ||
+        isNaN(event.latitude) ||
+        isNaN(event.longitude)
+      ) {
         console.warn(`⚠ Evento senza coordinate valide: ${event.title}`);
         return; // Salta questo evento se non ha coordinate valide
       }
 
-      new mapboxgl.Marker()
-        .setLngLat([event.longitude, event.latitude])
-        .setPopup(new mapboxgl.Popup().setHTML(`<h4>${event.title}</h4><p>${event.location}</p>`))
+      events.forEach((event) => {
+        if (
+          !event.latitude ||
+          !event.longitude ||
+          isNaN(event.latitude) ||
+          isNaN(event.longitude)
+        ) {
+          console.warn(`⚠ Evento senza coordinate valide: ${event.title}`);
+          return; // Salta questo evento se non ha coordinate valide
+        }
+
+        // Creazione di un contenitore HTML per il popup
+        const popupContent = document.createElement("div");
+        popupContent.innerHTML = `
+          <div class="map-popup-card">
+            <h5 class="map-popup-title">${event.title}</h5>
+            <p class="map-popup-text"><strong>Data:</strong> ${new Date(
+              event.date
+            ).toLocaleDateString()}</p>
+            <p class="map-popup-text"><strong>Posizione:</strong> ${
+              event.location
+            }</p>
+            <button class="map-popup-button" onclick="window.location.href='/event/${
+              event._id
+            }'">Dettagli</button>
+          </div>
+        `;
+
+        const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(
+          popupContent
+        );
+
+        new mapboxgl.Marker({ color: "#000000" })
+          .setLngLat([event.longitude, event.latitude])
+          .setPopup(popup)
+          .addTo(map);
+      });
+    });
+
+    galleries.forEach((gallery) => {
+      if (
+        !gallery.latitude ||
+        !gallery.longitude ||
+        isNaN(gallery.latitude) ||
+        isNaN(gallery.longitude)
+      ) {
+        console.warn(`⚠ Galleria senza coordinate valide: ${gallery.name}`);
+        return; // Salta questa galleria se non ha coordinate valide
+      }
+
+      const popupContent = document.createElement("div");
+      popupContent.innerHTML = `
+                  <div class="map-popup-card">
+                    <h5 class="map-popup-title">${gallery.name}</h5>
+                    <p class="map-popup-text"><strong>Posizione:</strong> ${gallery.location}</p>
+                    <button class="map-popup-button" onclick="window.location.href='/gallery/${gallery._id}'">Dettagli</button>
+                  </div>
+                `;
+
+      const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(
+        popupContent
+      );
+
+      new mapboxgl.Marker({ color: "#6E32FF" }) // 🔥 Marker viola per differenziare le gallerie
+        .setLngLat([gallery.longitude, gallery.latitude])
+        .setPopup(popup)
         .addTo(map);
     });
 
     return () => map.remove(); // Pulisce la mappa al cambio di pagina
   }, [events]);
 
-  return <div ref={mapContainerRef} style={{ width: "100%", height: "500px", borderRadius: "10px" }} />;
+  return <div ref={mapContainerRef} className="map-container" />;
 };
 
 export default MapboxMap;

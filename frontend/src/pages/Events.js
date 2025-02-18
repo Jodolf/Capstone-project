@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Row, Col, Modal } from "react-bootstrap";
-import { FaRegStar, FaStar } from "react-icons/fa"; // Icone stella
+import { FaRegEye, FaEye } from "react-icons/fa"; // Icone occhio
 import { useNavigate } from "react-router-dom";
+
+import "../styles/Events.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -84,40 +86,40 @@ const Events = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <h2>Eventi</h2>
-      <Row>
-        {events.map((event) => (
-          <Col key={event._id} md={4} className="mb-4">
-            <Card>
-              <Card.Body>
-                <Card.Title>{event.title}</Card.Title>
-                <Card.Text>{event.description}</Card.Text>
-                <Card.Text>
-                  <strong>Data:</strong> {event.date}
-                </Card.Text>
-                <Button
-                  variant="link"
-                  onClick={() => toggleFavorite(event._id)}
-                  className="text-warning"
-                >
-                  {savedEvents.has(event._id) ? (
-                    <FaStar size={24} />
-                  ) : (
-                    <FaRegStar size={24} />
-                  )}
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => navigate(`/event/${event._id}`)}
-                >
-                  Dettagli Evento
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+<Container className="events-container">
+  <h2>Eventi</h2>
+  <Row>
+    {events.map((event) => (
+      <Col key={event._id} md={4} className="mb-4">
+        <Card className="event-card">
+          <Card.Body>
+            <Card.Title className="event-card-title">{event.title}</Card.Title>
+            <Card.Text className="event-card-text">{event.description}</Card.Text>
+            <Card.Text className="event-card-text">
+              <strong>Data:</strong> {new Date(event.date).toLocaleDateString()}
+            </Card.Text>
+            <Button
+              className="button-primary-outline event-card-button"
+              onClick={() => navigate(`/event/${event._id}`)}
+            >
+              Dettagli Evento
+            </Button>
+            <Button
+  className="favorite-button"
+  onClick={() => toggleFavorite(event._id)}
+>
+  {savedEvents.has(event._id) ? (
+    <FaEye color="#6E32FF" size={24} /> // 🔵 Occhio Viola se salvato
+  ) : (
+    <FaRegEye color="#000000" size={24} /> // ⚫ Occhio Nero se non salvato
+  )}
+</Button>
+
+          </Card.Body>
+        </Card>
+      </Col>
+    ))}
+  </Row>
 
       {/* Modal per invitare al login */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>

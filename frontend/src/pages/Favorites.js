@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaRegEye, FaEye } from "react-icons/fa"; // Icone occhio
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -33,14 +34,18 @@ const Favorites = () => {
       {favorites.length === 0 ? (
         <p>Non hai ancora salvato eventi.</p>
       ) : (
-        <ul>
-          {favorites.map((event) => (
-            <li key={event._id} onClick={() => navigate(`/event/${event._id}`)} style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
-              <h3>{event.title}</h3>
-              <p>{event.description}</p>
-            </li>
-          ))}
-        </ul>
+<ul>
+  {favorites.map((event) => (
+    <li
+      key={event._id}
+      onClick={() => navigate(`/event/${event._id}`)}
+      style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+    >
+      <FaEye color="#6E32FF" size={24} style={{ marginRight: "8px" }} />
+      <h3>{event.title}</h3>
+    </li>
+  ))}
+</ul>
       )}
     </div>
   );

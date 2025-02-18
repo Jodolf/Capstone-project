@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Card } from "react-bootstrap";
+
+import "../styles/Galleries.css";
 
 const Galleries = () => {
   const [galleries, setGalleries] = useState([]);
@@ -24,21 +27,30 @@ const Galleries = () => {
   }, []);
 
   return (
-    <div className="container mt-4">
-      <h2>Gallerie d'Arte</h2>
-      <ul>
-        {galleries.length > 0 ? (
-          galleries.map((gallery) => (
-            <li key={gallery._id} onClick={() => navigate(`/gallery/${gallery._id}`)} style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
-              <h3>{gallery.name}</h3>
-              <p>{gallery.location}</p>
-            </li>
-          ))
-        ) : (
-          <p>❌ Nessuna galleria trovata.</p>
-        )}
-      </ul>
-    </div>
+<Container className="galleries-container">
+  <h2>Gallerie d'Arte</h2>
+  <Row>
+    {galleries.length > 0 ? (
+      galleries.map((gallery) => (
+        <Col key={gallery._id} md={4} className="mb-4">
+          <Card className="gallery-card" onClick={() => navigate(`/gallery/${gallery._id}`)}>
+            <Card.Img
+              variant="top"
+              src={gallery.images.length > 0 ? gallery.images[0] : "https://via.placeholder.com/300x200"}
+              alt={gallery.name}
+            />
+            <Card.Body>
+              <Card.Title className="gallery-card-title">{gallery.name}</Card.Title>
+              <Card.Text className="gallery-card-text">{gallery.location}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      ))
+    ) : (
+      <p>❌ Nessuna galleria trovata.</p>
+    )}
+  </Row>
+</Container>
   );
 };
 

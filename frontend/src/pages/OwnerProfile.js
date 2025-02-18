@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-const UserProfile = () => {
-  const [user, setUser] = useState(null);
+const OwnerProfile = () => {
+  const [owner, setOwner] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -10,22 +10,22 @@ const UserProfile = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    console.log("🔍 Ruolo utente recuperato dal localStorage:", localStorage.getItem("userRole"));
-  
     fetch("http://localhost:3001/api/users/profile", {
       method: "GET",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
       .then((res) => res.json())
       .then((data) => {
-        setUser(data);
+        setOwner(data);
         setName(data.name);
         setEmail(data.email);
         setProfileImage(data.profileImage || "/uploads/default-avatar.png");
       })
-      .catch((error) => console.error("Errore nel recupero del profilo:", error));
+      .catch((error) => console.error("❌ Errore nel recupero del profilo:", error));
   }, []);
-      
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -44,7 +44,7 @@ const UserProfile = () => {
 
       setProfileImage(data.imageUrl);
     } catch (error) {
-      console.error("Errore durante l'upload:", error);
+      console.error("❌ Errore durante l'upload:", error);
       setErrorMessage(error.message);
     }
   };
@@ -77,10 +77,10 @@ const UserProfile = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Profilo Utente</h2>
+      <h2>Profilo Gallerista</h2>
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-      
+
       <form onSubmit={handleUpdateProfile}>
         <div className="mb-3">
           <label className="form-label">Nome</label>
@@ -104,4 +104,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default OwnerProfile;

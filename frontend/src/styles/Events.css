@@ -1,0 +1,33 @@
+.events-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  
+  .event-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--secondary-color);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .event-card:hover {
+    transform: scale(1.03);
+    border-color: var(--primary-color);
+  }
+  
+  .event-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-color);
+  }
+  
+  .event-card-text {
+    font-size: 16px;
+    color: var(--primary-color);
+  }
+  
+  .event-card-button {
+    margin-top: 10px;
+  }
+  

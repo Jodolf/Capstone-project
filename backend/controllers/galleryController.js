@@ -1,6 +1,5 @@
-import Gallery from '../models/Gallery.js';
-
-
+import Gallery from "../models/Gallery.js";
+import multer from "multer";
 
 // Mostra tutte le gallerie (accessibile a tutti)
 const getAllGalleries = async (req, res) => {
@@ -8,7 +7,9 @@ const getAllGalleries = async (req, res) => {
     const galleries = await Gallery.find();
     res.status(200).json(galleries);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recupero delle gallerie", error });
+    res
+      .status(500)
+      .json({ message: "Errore nel recupero delle gallerie", error });
   }
 };
 
@@ -27,9 +28,30 @@ const getOwnedGalleries = async (req, res) => {
     res.status(200).json(galleries);
   } catch (error) {
     console.error("❌ Errore nel recupero delle gallerie:", error);
-    res.status(500).json({ message: "Errore nel recupero delle gallerie", error });
+    res
+      .status(500)
+      .json({ message: "Errore nel recupero delle gallerie", error });
   }
 };
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // 📂 Cartella dove salvare le immagini
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+// 🔥 Route per il caricamento immagini di una galleria
+router.post("/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "Nessun file caricato!" });
+  }
+  res.json({ imageUrl: `/uploads/${req.file.filename}` });
+});
 
 // Crea una nuova galleria e assegna il proprietario
 const createGallery = async (req, res) => {
@@ -38,13 +60,28 @@ const createGallery = async (req, res) => {
     console.log("🧑 Utente autenticato:", req.user);
 
     if (!req.user || req.user.role !== "gallery_owner") {
-      return res.status(403).json({ error: "Accesso negato. Solo i galleristi possono creare gallerie." });
+      return res
+        .status(403)
+        .json({
+          error: "Accesso negato. Solo i galleristi possono creare gallerie.",
+        });
     }
 
-    const { name, location, description, images } = req.body;
+    const { name, location, description, images, latitude, longitude } =
+      req.body;
 
-    if (!name || !location || !description) {
-      return res.status(400).json({ error: "Tutti i campi sono obbligatori!" });
+    if (
+      !name ||
+      !location ||
+      !description ||
+      latitude === undefined ||
+      longitude === undefined
+    ) {
+      return res
+        .status(400)
+        .json({
+          error: "Tutti i campi sono obbligatori, incluse le coordinate!",
+        });
     }
 
     const gallery = new Gallery({
@@ -52,7 +89,9 @@ const createGallery = async (req, res) => {
       location,
       description,
       images,
-      owner: req.user.id, // ✅ Usa `req.user.id` (non `_id`)
+      latitude: parseFloat(latitude), // 🔥 Converte in numero
+      longitude: parseFloat(longitude), // 🔥 Converte in numero
+      owner: req.user.id,
     });
 
     await gallery.save();
@@ -61,7 +100,12 @@ const createGallery = async (req, res) => {
     res.status(201).json(gallery);
   } catch (error) {
     console.error("❌ ERRORE nella creazione della galleria:", error);
-    res.status(500).json({ message: "Errore durante la creazione della galleria", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Errore durante la creazione della galleria",
+        error: error.message,
+      });
   }
 };
 
@@ -84,12 +128,18 @@ const getGalleryById = async (req, res) => {
 
 const updateGallery = async (req, res) => {
   const { id } = req.params;
-  const { name, description, location } = req.body;
+  const { name, description, location, latitude, longitude } = req.body;
 
   try {
     const updatedGallery = await Gallery.findByIdAndUpdate(
       id,
-      { name, description, location },
+      {
+        name,
+        description,
+        location,
+        latitude: parseFloat(latitude), // 🔥 Converte in numero
+        longitude: parseFloat(longitude), // 🔥 Converte in numero
+      },
       { new: true, runValidators: true }
     );
 
@@ -99,7 +149,12 @@ const updateGallery = async (req, res) => {
 
     res.status(200).json(updatedGallery);
   } catch (error) {
-    res.status(500).json({ message: "Errore durante l'aggiornamento della galleria", error });
+    res
+      .status(500)
+      .json({
+        message: "Errore durante l'aggiornamento della galleria",
+        error,
+      });
   }
 };
 
@@ -115,9 +170,17 @@ const deleteGallery = async (req, res) => {
 
     res.status(200).json({ message: "Galleria eliminata con successo" });
   } catch (error) {
-    res.status(500).json({ message: "Errore durante l'eliminazione della galleria", error });
+    res
+      .status(500)
+      .json({ message: "Errore durante l'eliminazione della galleria", error });
   }
 };
 
-
-export { getAllGalleries, createGallery, getOwnedGalleries, getGalleryById, updateGallery, deleteGallery };
+export {
+  getAllGalleries,
+  createGallery,
+  getOwnedGalleries,
+  getGalleryById,
+  updateGallery,
+  deleteGallery,
+};

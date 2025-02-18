@@ -14,6 +14,7 @@ import Galleries from "./pages/Galleries";
 import Favorites from "./pages/Favorites.js";
 
 import UserProfile from "./pages/UserProfile";
+import OwnerProfile from "./pages/OwnerProfile";
 import GalleryOwnerProfile from "./pages/GalleryOwnerProfile";
 
 import ManageGallery from "./pages/ManageGallery"; // ✅ Importata la gestione galleria
@@ -48,25 +49,25 @@ function App() {
           <Route path="/event/:eventId" element={<EventDetails />} />
           <Route path="/gallery/:galleryId" element={<GalleryDetail />} />
 
-
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                {localStorage.getItem("user") &&
-                JSON.parse(localStorage.getItem("user")).role ===
-                  "gallery_owner" ? (
-                  <GalleryOwnerProfile />
-                ) : (
-                  <UserProfile />
-                )}
-              </PrivateRoute>
-            }
-          />
+  path="/profile"
+  element={
+    localStorage.getItem("token") ? (
+      JSON.parse(localStorage.getItem("user")).role === "gallery_owner" ? (
+        <OwnerProfile />
+      ) : (
+        <UserProfile />
+      )
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
         </Routes>
+        
       </div>
     </Router>
   );

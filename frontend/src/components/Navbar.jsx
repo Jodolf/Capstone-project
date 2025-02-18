@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 
 const MainNavbar = () => {
@@ -9,13 +9,13 @@ const MainNavbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const role = localStorage.getItem("userRole"); // Recupera il ruolo salvato
+    const role = localStorage.getItem("userRole");
+    console.log("🔍 Ruolo utente in Navbar:", role); // Debug
     if (token) {
       setIsAuthenticated(true);
       setUserRole(role);
     }
   }, []);
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userRole");
@@ -25,65 +25,66 @@ const MainNavbar = () => {
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="/">WHERE THE ART IS</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/events">EVENTS</Nav.Link>
-            <Nav.Link href="/galleries">GALLERIES</Nav.Link>
-          </Nav>
+    <Navbar expand="lg" className="bg-body-tertiary px-4">
+      <Container fluid>
+        {/* 🔹 Sezione Sinistra */}
+        <Nav className="me-auto">
+          <Navbar.Brand as={Link} to="/">
+            WHERE THE ART IS
+          </Navbar.Brand>
+          <Nav.Link as={Link} to="/events">
+            EVENTS
+          </Nav.Link>
+          <Nav.Link as={Link} to="/galleries">
+            GALLERIES
+          </Nav.Link>
+        </Nav>
 
-          {/* Menu Utente */}
+        {/* 🔹 Sezione Destra */}
+        <Nav className="ms-auto align-items-center">
           {isAuthenticated ? (
-            <Nav>
-              <NavDropdown title="👤 Account" id="user-menu">
-                <NavDropdown.Item href="/profile">
-                  Gestione Profilo
-                </NavDropdown.Item>
+            <>
 
-                {userRole === "user" && (
-                  <NavDropdown.Item href="/favorites">
-                    Lista Preferiti
-                  </NavDropdown.Item>
-                )}
+<Nav.Link as={Link} to="/profile">
+  👤 Profilo
+</Nav.Link>
 
-                {userRole === "gallery_owner" && (
-                  <>
-                    <NavDropdown.Item as={Link} to="/manage-galleries">
-                      Gestione Gallerie
-                    </NavDropdown.Item>
-                    {/*<NavDropdown.Item href="/manage-events">Gestione Eventi</NavDropdown.Item>*/}
-                  </>
-                )}
+              {userRole === "user" && (
+                <Nav.Link as={Link} to="/favorites">
+                  ⭐ Preferiti
+                </Nav.Link>
+              )}
 
-                <NavDropdown.Divider />
-                <NavDropdown.Item
-                  onClick={handleLogout}
-                  className="text-danger"
-                >
-                  Logout
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
+              {userRole === "gallery_owner" && (
+                <Nav.Link as={Link} to="/manage-galleries">
+                  🏛️ Gestione Gallerie
+                </Nav.Link>
+              )}
+
+              <Button
+                className="button-primary-outline ms-2"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </>
           ) : (
             <>
               <Button
-                className="button-primary"
+                className="button-primary me-2"
                 onClick={() => navigate("/login")}
               >
                 Login
               </Button>
               <Button
-                className="button-primary-outline ms-2"
+                className="button-primary-outline"
                 onClick={() => navigate("/register")}
               >
                 Registrati
               </Button>
             </>
           )}
-        </Navbar.Collapse>
+        </Nav>
       </Container>
     </Navbar>
   );

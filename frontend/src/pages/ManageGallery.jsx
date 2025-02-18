@@ -11,8 +11,11 @@ const ManageGallery = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [images, setImages] = useState([]); // 🔥 Definiamo lo stato per le immagini
 
   useEffect(() => {
     const fetchGalleryAndEvents = async () => {
@@ -43,6 +46,8 @@ const ManageGallery = () => {
         setName(galleryData.name);
         setDescription(galleryData.description);
         setLocation(galleryData.location);
+        setLatitude(galleryData.latitude);
+        setLongitude(galleryData.longitude);
 
         // Recupera eventi associati alla galleria
         const eventsResponse = await fetch(
@@ -64,6 +69,29 @@ const ManageGallery = () => {
     fetchGalleryAndEvents();
   }, [galleryId]);
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("image", file);
+  
+    try {
+      const response = await fetch("http://localhost:3001/api/galleries/upload", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Errore durante l'upload");
+  
+      console.log("✅ Immagine caricata con successo:", data.imageUrl);
+      setImages((prevImages) => [...prevImages, data.imageUrl]);
+    } catch (error) {
+      console.error("❌ Errore nell'upload dell'immagine:", error);
+    }
+  };
+  
   // Funzione per aggiornare la galleria
   const handleUpdateGallery = async (e) => {
     e.preventDefault();
@@ -79,7 +107,13 @@ const ManageGallery = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ name, description, location }),
+          body: JSON.stringify({
+            name,
+            description,
+            location,
+            latitude,
+            longitude,
+          }),
         }
       );
 
@@ -169,6 +203,34 @@ const ManageGallery = () => {
                 required
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Latitudine</Form.Label>
+              <Form.Control
+                type="number"
+                value={latitude}
+                onChange={(e) => setLatitude(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Longitudine</Form.Label>
+              <Form.Control
+                type="number"
+                value={longitude}
+                onChange={(e) => setLongitude(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Carica Immagine</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </Form.Group>
 
             <Button type="submit">Salva Modifiche</Button>
           </Form>
@@ -208,10 +270,10 @@ const ManageGallery = () => {
       {gallery && (
         <>
           <h3>Crea un Nuovo Evento</h3>
-          <CreateEvent 
-  onEventCreated={(newEvent) => setEvents([...events, newEvent])} 
-  galleryId={gallery._id} 
-/>
+          <CreateEvent
+            onEventCreated={(newEvent) => setEvents([...events, newEvent])}
+            galleryId={gallery._id}
+          />
         </>
       )}
     </Container>
