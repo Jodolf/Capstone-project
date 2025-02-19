@@ -5,7 +5,7 @@ import {
   Routes,
   Route,
   Navigate,
-} from "react-router-dom"; // ✅ Aggiunto Navigate
+} from "react-router-dom"; 
 
 import MainNavbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -17,8 +17,8 @@ import UserProfile from "./pages/UserProfile";
 import OwnerProfile from "./pages/OwnerProfile";
 import GalleryOwnerProfile from "./pages/GalleryOwnerProfile";
 
-import ManageGallery from "./pages/ManageGallery"; // ✅ Importata la gestione galleria
-import EditEvent from "./components/EditEvent"; // Importa il componente di modifica evento
+import ManageGallery from "./pages/ManageGallery"; 
+import EditEvent from "./components/EditEvent"; 
 
 import EventDetails from "./pages/EventDetail";
 import GalleryDetail from "./pages/GalleryDetail";
@@ -27,8 +27,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem("token"); // Controlla se l'utente è loggato
-  return token ? children : <Navigate to="/login" />; //  Navigate ora è importato correttamente
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" />; 
 };
 
 function App() {

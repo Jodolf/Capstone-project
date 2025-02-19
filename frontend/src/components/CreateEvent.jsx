@@ -10,7 +10,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [type, setType] = useState("exhibition"); // Imposta un valore predefinito
+  const [type, setType] = useState("exhibition"); 
   const [cost, setCost] = useState(0);
 
   const handleSubmit = async (e) => {
@@ -33,7 +33,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
       longitude,
     };
   
-    console.log("📌 Dati inviati nella richiesta:", eventData); // Debug
+    console.log("📌 Dati inviati nella richiesta:", eventData); 
   
     try {
       const response = await fetch("http://localhost:3001/api/events", {
@@ -42,7 +42,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(eventData), // 🔥 Assicuriamoci che il body sia costruito correttamente
+        body: JSON.stringify(eventData), 
       });
   
       const data = await response.json();

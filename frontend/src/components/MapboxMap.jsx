@@ -4,7 +4,6 @@ import "../styles/MapboxMap.css";
 import { Card } from "react-bootstrap";
 
 const MapboxMap = ({ events, galleries }) => {
-  // Modificato: ora accetta eventi, non gallerie
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -12,8 +11,8 @@ const MapboxMap = ({ events, galleries }) => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/light-v11", // Stile minimal
-      center: [12.4964, 41.9028], // Coordinate iniziali (Roma)
+      style: "mapbox://styles/mapbox/light-v11", 
+      center: [12.4964, 41.9028], 
       zoom: 5,
     });
 
@@ -92,7 +91,7 @@ const MapboxMap = ({ events, galleries }) => {
         popupContent
       );
 
-      new mapboxgl.Marker({ color: "#6E32FF" }) // 🔥 Marker viola per differenziare le gallerie
+      new mapboxgl.Marker({ color: "#6E32FF" }) 
         .setLngLat([gallery.longitude, gallery.latitude])
         .setPopup(popup)
         .addTo(map);

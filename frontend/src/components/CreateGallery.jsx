@@ -28,7 +28,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name, location, description, latitude, longitude }), // ✅ Aggiunto latitude e longitude
+        body: JSON.stringify({ name, location, description, latitude, longitude }), 
       });
   
       const data = await response.json();
@@ -41,7 +41,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
   
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
-      onGalleryCreated(data); // ✅ Aggiorna la lista delle gallerie nel profilo
+      onGalleryCreated(data); 
     } catch (error) {
       console.error("❌ Errore nella creazione della galleria:", error);
     }
@@ -82,7 +82,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
             value={latitude}
             onChange={(e) =>
               setLatitude(e.target.value ? parseFloat(e.target.value) : "")
-            } // 🔥 Assicura che non sia stringa vuota
+            } 
             required
           />
         </Form.Group>
@@ -95,7 +95,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
             value={longitude}
             onChange={(e) =>
               setLongitude(e.target.value ? parseFloat(e.target.value) : "")
-            } // 🔥 Assicura che non sia stringa vuota
+            } 
             required
           />
         </Form.Group>

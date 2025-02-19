@@ -70,8 +70,8 @@ const createGallery = async (req, res) => {
       location,
       description,
       images,
-      latitude: parseFloat(latitude), // 🔥 Converte in numero
-      longitude: parseFloat(longitude), // 🔥 Converte in numero
+      latitude: parseFloat(latitude), 
+      longitude: parseFloat(longitude), 
       owner: req.user.id,
     });
 
@@ -93,7 +93,7 @@ const createGallery = async (req, res) => {
 const getGalleryById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("🔍 ID della galleria ricevuto:", id); // Debug
+    console.log("🔍 ID della galleria ricevuto:", id);
 
     const gallery = await Gallery.findById(id);
     if (!gallery) {
@@ -104,6 +104,37 @@ const getGalleryById = async (req, res) => {
   } catch (error) {
     console.error("❌ Errore nel recupero della galleria:", error);
     res.status(500).json({ message: "Errore nel recupero della galleria" });
+  }
+};
+
+const uploadGalleryImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded!" });
+    }
+
+    const galleryId = req.body.galleryId; // Assumiamo che venga inviato dal frontend
+    if (!galleryId) {
+      return res.status(400).json({ error: "Gallery ID is required!" });
+    }
+
+    const imageUrl = `/uploads/${req.file.filename}`;
+
+    // Aggiorniamo la galleria con la nuova immagine (aggiungendola all'array images)
+    const updatedGallery = await Gallery.findByIdAndUpdate(
+      galleryId,
+      { $push: { images: imageUrl } }, // 🔥 Aggiunge la nuova immagine all'array
+      { new: true } // 🔥 Restituisce il documento aggiornato
+    );
+
+    if (!updatedGallery) {
+      return res.status(404).json({ error: "Gallery not found!" });
+    }
+
+    res.json({ message: "Image uploaded successfully!", imageUrl });
+  } catch (error) {
+    console.error("❌ Error uploading image:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -118,8 +149,8 @@ const updateGallery = async (req, res) => {
         name,
         description,
         location,
-        latitude: parseFloat(latitude), // 🔥 Converte in numero
-        longitude: parseFloat(longitude), // 🔥 Converte in numero
+        latitude: parseFloat(latitude), 
+        longitude: parseFloat(longitude), 
       },
       { new: true, runValidators: true }
     );
@@ -162,6 +193,7 @@ export {
   createGallery,
   getOwnedGalleries,
   getGalleryById,
+  uploadGalleryImage,
   updateGallery,
   deleteGallery,
 };

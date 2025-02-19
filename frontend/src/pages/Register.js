@@ -28,7 +28,7 @@ const Register = () => {
       if (!response.ok) throw new Error(data.message || "Registrazione fallita");
   
       setSuccessMessage("Registrazione completata! Ora puoi accedere.");
-      setTimeout(() => navigate("/login"), 2000); // Redirige dopo 2 secondi
+      setTimeout(() => navigate("/login"), 2000); 
     } catch (error) {
       setError(error.message);
     }

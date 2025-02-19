@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import CreateGallery from "../components/CreateGallery";
-import "../styles/GalleryOwnerProfile.css"; // 🔥 Importa il CSS
+import "../styles/GalleryOwnerProfile.css";
 
 const GalleryOwnerProfile = () => {
   const [galleries, setGalleries] = useState([]);

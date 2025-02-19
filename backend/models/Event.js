@@ -49,8 +49,8 @@ const eventSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // 🔥 Collegamento all'utente proprietario
-    required: true, // 🔥 Assicuriamoci che tutti gli eventi abbiano un owner
+    ref: 'User', //  Collegamento all'utente proprietario
+    required: true, //  Assicuriamoci che tutti gli eventi abbiano un owner
   },
 });
 

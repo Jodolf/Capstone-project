@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Row, Col, Modal } from "react-bootstrap";
-import { FaRegEye, FaEye } from "react-icons/fa"; // Icone occhio
+import { FaRegEye, FaEye } from "react-icons/fa"; 
 import { useNavigate } from "react-router-dom";
 
 import "../styles/Events.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-  const [savedEvents, setSavedEvents] = useState(new Set()); // Usiamo un Set per gestire i preferiti
+  const [savedEvents, setSavedEvents] = useState(new Set()); 
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const isAuthenticated = !!token;
-  const userRole = localStorage.getItem("userRole"); // 🔥 Recupera il ruolo salvato
+  const userRole = localStorage.getItem("userRole"); 
 
   useEffect(() => {
     // Fetch eventi
@@ -113,9 +113,9 @@ const Events = () => {
     }}
   >
     {savedEvents.has(event._id) ? (
-      <FaEye color="#6E32FF" size={24} /> // 🟣 Occhio Viola se salvato
+      <FaEye color="#6E32FF" size={24} /> 
     ) : (
-      <FaRegEye color="#000000" size={24} /> // ⚫ Occhio Nero se non salvato
+      <FaRegEye color="#000000" size={24} /> 
     )}
   </button>
 )}

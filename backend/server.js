@@ -24,6 +24,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Per leggere JSON nel body delle richieste
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 // Database Connection
 mongoose
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
 app.use('/api/galleries', galleryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
-app.use("/api/upload", uploadRoutes); // 🟢 Assicura che questa linea sia presente
+app.use("/api/upload", uploadRoutes); 
 
 
 // Avviare il server

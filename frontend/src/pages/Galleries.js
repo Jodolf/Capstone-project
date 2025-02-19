@@ -6,7 +6,7 @@ import "../styles/Galleries.css";
 
 const Galleries = () => {
   const [galleries, setGalleries] = useState([]);
-  const navigate = useNavigate(); // Per la navigazione
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     fetch("http://localhost:3001/api/galleries")
@@ -35,9 +35,9 @@ const Galleries = () => {
           onClick={() => navigate(`/gallery/${gallery._id}`)}
         >
           {gallery.images?.length > 0 ? (
-            <img src={gallery.images[0]} alt={gallery.name} />
+            <img src={`http://localhost:3001${gallery.images[gallery.images.length - 1]}`} alt={gallery.name} />
           ) : (
-            <div className="gallery-placeholder"></div> // 🔥 Placeholder bianco
+            <div className="gallery-placeholder"></div> 
           )}
           <div className="gallery-info">
             <h3 className="gallery-title">{gallery.name}</h3>

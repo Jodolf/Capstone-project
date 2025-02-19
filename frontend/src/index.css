@@ -129,7 +129,6 @@ button {
 
 
 
-/* Stile pulsante occhio */
 .event-eye-button {
   color: var(--primary-color); /* Bianco di default */
   border: none;
@@ -138,7 +137,6 @@ button {
   padding: 8px;
   transition: color 0.3s ease-in-out;
 }
-/* Cambia colore se l'evento è salvato */
 .event-eye-button.saved {
   color: var(--secondary-color); /* Viola se salvato */
 }
@@ -149,7 +147,6 @@ button {
 
 
 
-/* 🎨 Stile Generale degli Input */
 input, textarea, select {
   font-family: inherit; /* 🔥 Usa lo stesso font del resto del sito */
   font-size: 16px;
@@ -164,31 +161,26 @@ input, textarea, select {
   border-radius: 0;
 }
 
-/* 🔥 Effetto focus */
 input:focus, textarea:focus, select:focus {
   border-bottom: 2px solid #6E32FF; /* Cambia in viola quando selezionato */
   border-radius: 0;
 
 }
 
-/* 🔥 Rimuove gli stili di default dai select */
 select {
   appearance: none; /* Rimuove lo stile di default del sistema */
   cursor: pointer;
 }
 
-/* 🎨 Per le textarea: no resize */
 textarea {
   resize: none;
 }
 
-/* 🎨 Stile del Placeholder */
 ::placeholder {
   color: #666;
   opacity: 0.7;
 }
 
-/* 🔥 Disabilita la outline blu di Bootstrap */
 input:focus, textarea:focus, select:focus {
   outline: none;
   box-shadow: none;

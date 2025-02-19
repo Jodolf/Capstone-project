@@ -16,7 +16,7 @@ const ManageGallery = () => {
   const [longitude, setLongitude] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [images, setImages] = useState([]); // 🔥 Definiamo lo stato per le immagini
+  const [images, setImages] = useState([]); 
 
   useEffect(() => {
     const fetchGalleryAndEvents = async () => {
@@ -70,33 +70,36 @@ const ManageGallery = () => {
     fetchGalleryAndEvents();
   }, [galleryId]);
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
     if (!file) return;
-
+  
     const formData = new FormData();
     formData.append("image", file);
-
+    formData.append("galleryId", gallery._id); // 🔥 Assicuriamoci di inviare il galleryId
+  
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/galleries/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
+      const response = await fetch("http://localhost:3001/api/galleries/uploads", {
+        method: "POST",
+        body: formData,
+      });
+  
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Errore durante l'upload");
-
+      if (!response.ok) throw new Error(data.message || "Errore nell'upload");
+  
       console.log("✅ Immagine caricata con successo:", data.imageUrl);
-      setImages((prevImages) => [...prevImages, data.imageUrl]);
+      
+      // 🔥 Aggiorna lo stato per mostrare subito l'immagine senza refresh
+      setGallery((prev) => ({
+        ...prev,
+        images: [...prev.images, data.imageUrl], // Aggiunge la nuova immagine all'array
+      }));
+  
     } catch (error) {
       console.error("❌ Errore nell'upload dell'immagine:", error);
     }
   };
-
+  
   // Funzione per aggiornare la galleria
   const handleUpdateGallery = async (e) => {
     e.preventDefault();
@@ -134,7 +137,6 @@ const ManageGallery = () => {
     }
   };
 
-  // Funzione per eliminare la galleria
   const handleDeleteGallery = async () => {
     if (
       !window.confirm(
@@ -159,7 +161,7 @@ const ManageGallery = () => {
         throw new Error("Errore durante l'eliminazione della galleria");
 
       alert("Galleria eliminata con successo!");
-      navigate("/manage-galleries"); // Reindirizza alla lista delle gallerie
+      navigate("/manage-galleries"); 
     } catch (error) {
       console.error("Errore durante l'eliminazione della galleria:", error);
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // ✅ Aggiunto useEffect
+import React, { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Alert } from "react-bootstrap";
 
@@ -25,7 +25,7 @@ const Login = () => {
       if (!response.ok) throw new Error(data.message || "Login fallito");
   
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user)); // ✅ Ora salva l'intero oggetto utente
+      localStorage.setItem("user", JSON.stringify(data.user)); 
       localStorage.setItem("userRole", data.user.role);
             
       navigate("/");
@@ -62,7 +62,7 @@ const Login = () => {
         </div>
         <div className="edit-event-buttons">
             <Button type="submit" className="button-primary">
-              SAVE
+              LOGIN
             </Button>
         </div>
       </form>

@@ -10,7 +10,7 @@ const EventDetails = () => {
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
-  const userRole = localStorage.getItem("userRole"); // Recupera il ruolo dell'utente
+  const userRole = localStorage.getItem("userRole");
   const [savedEvents, setSavedEvents] = useState(new Set());
   const [imageUrl, setImageUrl] = useState("");
 
@@ -91,7 +91,7 @@ const EventDetails = () => {
       if (!response.ok) throw new Error("Errore nell'eliminazione dell'evento");
 
       alert("Evento eliminato con successo!");
-      navigate("/events"); // Reindirizza alla lista eventi
+      navigate("/events");
     } catch (error) {
       console.error("Errore durante l'eliminazione:", error);
     }
@@ -103,14 +103,22 @@ const EventDetails = () => {
 
       {event ? (
         <div className="event-detail-card">
-          {/* 📷 Sezione Immagine + Occhio */}
+          
+          {/*  Sezione Immagine + Occhio */}
           <div className="event-detail-image-container">
-            {/*{event.images?.length > 0 ? (
-              <img src={`http://localhost:3001${event.images[0]}`} alt="Immagine evento" className="event-detail-image" />
+            {event.images?.length > 0 ? (
+              <img
+                src={`http://localhost:3001${
+                  event.images[event.images.length - 1]
+                }`} // 🔥 Ultima immagine caricata
+                alt="Immagine evento"
+                className="event-detail-image"
+              />
             ) : (
-              <div className="event-placeholder"></div> // Se non c'è immagine
-            )}*/}
-            {user?.role === "user" && (
+              <div className="event-placeholder"></div>
+            )}
+
+            {/*{user?.role === "user" && (
               <button className="favorite-button" onClick={() => toggleFavorite(event._id)}>
                 {savedEvents.has(event._id) ? (
                   <FaEye color="#6E32FF" size={32} />
@@ -118,34 +126,55 @@ const EventDetails = () => {
                   <FaRegEye color="#000000" size={32} />
                 )}
               </button>
-            )}
+            )}*/}
           </div>
 
-          {/* 📝 Sezione Dettagli */}
+          {/*  Sezione Dettagli */}
           <div className="event-detail-content">
-            <p className="event-detail-text">{new Date(event.date).toLocaleDateString()}</p>
+            <p className="event-detail-text">
+              {new Date(event.date).toLocaleDateString()}
+            </p>
             <h1 className="event-detail-title">{event.title}</h1>
             <p className="event-detail-description">{event.description}</p>
-            <p className="event-detail-text"><strong>KIND:</strong> {event.type}</p>
-            <p className="event-detail-text"><strong>COST:</strong> {event.cost > 0 ? `${event.cost}€` : "Gratis"}</p>
-            <p className="event-detail-text"><strong>POSITION:</strong> {event.location}</p>
+            <p className="event-detail-text">
+              <strong>KIND:</strong> {event.type}
+            </p>
+            <p className="event-detail-text">
+              <strong>COST:</strong>{" "}
+              {event.cost > 0 ? `${event.cost}€` : "Gratis"}
+            </p>
+            <p className="event-detail-text">
+              <strong>POSITION:</strong> {event.location}
+            </p>
 
             {event.gallery && (
               <p className="event-detail-text">
                 {/*<strong>Galleria:</strong>{" "}*/}
-                <span className="event-detail-link" onClick={() => navigate(`/gallery/${event.gallery._id}`)}>
+                <span
+                  className="event-detail-link"
+                  onClick={() => navigate(`/gallery/${event.gallery._id}`)}
+                >
                   {event.gallery.name}
                 </span>
               </p>
             )}
 
-{user?.role === "gallery_owner" && isOwner && (
-  <div className="event-detail-buttons">
-    <Button className="button-primary" onClick={() => navigate(`/edit-event/${eventId}`)}>UPDATE</Button>
-    <Button className="button-primary-outline" onClick={handleDeleteEvent}>DELETE</Button>
-  </div>
-)}
-
+            {user?.role === "gallery_owner" && isOwner && (
+              <div className="event-detail-buttons">
+                <Button
+                  className="button-primary"
+                  onClick={() => navigate(`/edit-event/${eventId}`)}
+                >
+                  UPDATE
+                </Button>
+                <Button
+                  className="button-primary-outline"
+                  onClick={handleDeleteEvent}
+                >
+                  DELETE
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -154,6 +183,5 @@ const EventDetails = () => {
     </div>
   );
 };
-
 
 export default EventDetails;

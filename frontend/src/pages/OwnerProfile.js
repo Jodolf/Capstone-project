@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
-import "../styles/EditEvent.css"; // 🔥 Riutilizza lo stesso CSS di EditEvent
+import "../styles/EditEvent.css"; 
 
 const OwnerProfile = () => {
   const [owner, setOwner] = useState(null);
@@ -79,7 +79,7 @@ const OwnerProfile = () => {
 
   return (
     <Container className="edit-event-container">
-      <h2 className="edit-event-title">PROFILE</h2> {/* Stile di EditEvent */}
+      <h2 className="edit-event-title">PROFILE</h2> 
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 

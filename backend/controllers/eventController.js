@@ -4,7 +4,7 @@ import Event from "../models/Event.js";
 // Crea un nuovo evento
 const createEvent = async (req, res) => {
   const { title, description, date, location, type, cost, latitude, longitude, gallery } = req.body;
-  const owner = req.user.id; // 🔥 Assicuriamoci di salvare l'owner
+  const owner = req.user.id; 
 
   try {
     const newEvent = new Event({
@@ -17,7 +17,7 @@ const createEvent = async (req, res) => {
       latitude,
       longitude,
       gallery,
-      owner, // 🔥 Assicuriamoci che l'owner venga salvato
+      owner, 
     });
 
     const savedEvent = await newEvent.save();
@@ -46,7 +46,7 @@ const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(id)
       .populate("gallery", "name location")
-      .populate("owner", "_id name"); // 🔥 Assicuriamoci che l'owner sia caricato correttamente
+      .populate("owner", "_id name"); 
 
     if (!event) {
       return res.status(404).json({ message: "Evento non trovato" });
@@ -63,10 +63,10 @@ const getEventById = async (req, res) => {
 
 // Ottieni eventi filtrati per tipo
 const getEventsByType = async (req, res) => {
-  const { type } = req.query; // Recupera il parametro 'type' dalla query string
+  const { type } = req.query; 
 
   try {
-    // Verifica che il tipo sia stato fornito
+    
     if (!type) {
       return res
         .status(400)
@@ -136,7 +136,7 @@ const updateEvent = async (req, res) => {
   try {
       const { title, description, date, location, latitude, longitude, type, cost, images } = req.body;
 
-      // 🔥 Se l'evento esiste, aggiorniamo anche le immagini
+     
       const updatedEvent = await Event.findByIdAndUpdate(
           req.params.id,
           {
@@ -148,7 +148,7 @@ const updateEvent = async (req, res) => {
               longitude,
               type,
               cost,
-              $push: { images: { $each: images || [] } }, // 🔥 Aggiunge nuove immagini senza sovrascrivere
+              $push: { images: { $each: images || [] } }, 
           },
           { new: true }
       );

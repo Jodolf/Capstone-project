@@ -79,7 +79,7 @@ const UserProfile = () => {
 
   return (
     <Container className="edit-event-container">
-      <h2 className="edit-event-title">PROFILE</h2> {/* Stile di EditEvent */}
+      <h2 className="edit-event-title">PROFILE</h2> 
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 

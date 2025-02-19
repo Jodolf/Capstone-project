@@ -42,33 +42,37 @@ const GalleryDetail = () => {
   }, [galleryId]);
 
   return (
-    <Container className="gallery-detail-container">
+    <div className="gallery-detail-container">
       {gallery ? (
         <>
           <div className="gallery-detail-card">
-            {/* 📷 Sezione Immagine */}
-{/* 📷 Sezione Immagine */}
-<div className="gallery-detail-image-container">
-  {gallery.images?.length > 0 ? (
-    <img
-      src={`http://localhost:3001${gallery.images[0]}`}
-      alt="Immagine galleria"
-      className="gallery-detail-image"
-    />
-  ) : (
-    <div className="gallery-placeholder"></div> // 🔥 Placeholder per mantenere spazio
-  )}
-</div>
-  
-            {/* 📝 Sezione Dettagli + Lista Eventi */}
+            
+            {/*  Sezione Immagine */}
+            <div className="gallery-detail-image-container">
+              {gallery.images?.length > 0 ? (
+                <img
+                  src={`http://localhost:3001${
+                    gallery.images[gallery.images.length - 1]
+                  }`}
+                  alt={gallery.name}
+                  className="gallery-detail-image"
+                />
+              ) : (
+                <div className="gallery-placeholder"></div>
+              )}
+            </div>
+
+            {/*  Sezione Dettagli + Lista Eventi */}
             <div className="gallery-detail-content">
               <h1 className="gallery-detail-title">{gallery.name}</h1>
-              <p className="gallery-detail-description">{gallery.description}</p>
+              <p className="gallery-detail-description">
+                {gallery.description}
+              </p>
               <p className="gallery-detail-text">
                 <strong>POSIZIONE:</strong> {gallery.location}
               </p>
-  
-              {/* 📌 Lista degli Eventi - Ora dentro la descrizione */}
+
+              {/*  Lista degli Eventi - Ora dentro la descrizione */}
               <div className="gallery-events-list">
                 {/*<h3>Eventi Associati</h3>*/}
                 {events.length > 0 ? (
@@ -94,8 +98,8 @@ const GalleryDetail = () => {
       ) : (
         <p>Caricamento...</p>
       )}
-    </Container>
+    </div>
   );
-    };
+};
 
 export default GalleryDetail;

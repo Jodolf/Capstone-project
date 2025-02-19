@@ -17,7 +17,7 @@ const EditEvent = () => {
   const [longitude, setLongitude] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [images, setImages] = useState([]); // 🔥 Definiamo lo stato per le immagini
+  const [images, setImages] = useState([]); 
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -62,7 +62,6 @@ const EditEvent = () => {
 
       console.log("✅ Immagine caricata:", data.imageUrl);
 
-      // 🔥 Aggiunge l'immagine all'array esistente
       setImages((prevImages) => [...prevImages, data.imageUrl]);
     } catch (error) {
       console.error("❌ Errore nell'upload dell'immagine:", error);
@@ -86,7 +85,7 @@ const EditEvent = () => {
         cost,
         latitude,
         longitude,
-        images: images.length > 0 ? images : undefined, // 🔥 Assicura che l'immagine venga salvata
+        images: images.length > 0 ? images : undefined,
       };
 
       const response = await fetch(
@@ -210,7 +209,6 @@ const EditEvent = () => {
               onChange={handleImageUpload}
             />
           </Form.Group>
-          {/* 🔥 Anteprima delle immagini caricate */}
           {images.length > 0 && (
             <div className="image-preview">
               {images.map((img, index) => (

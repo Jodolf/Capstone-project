@@ -11,7 +11,7 @@ const MainNavbar = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("userRole");
-    console.log("🔍 Ruolo utente in Navbar:", role); // Debug
+    console.log("🔍 Ruolo utente in Navbar:", role); 
     if (token) {
       setIsAuthenticated(true);
       setUserRole(role);
@@ -31,7 +31,7 @@ const MainNavbar = () => {
         {/* 🔹 Sezione Sinistra */}
         <Nav className="me-auto">
           <Navbar.Brand as={Link} to="/">
-            WHERE THE FUCK ARE THE
+            WHERE THE HELL ARE THE
           </Navbar.Brand>
           <Nav.Link as={Link} to="/events">
             EVENTS

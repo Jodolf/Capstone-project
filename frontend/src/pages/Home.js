@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MapboxMap from "../components/MapboxMap";
-import "../styles/Home.css"; // Importiamo il file CSS per la home
+import "../styles/Home.css"; 
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <div>
-      <MapboxMap events={events} galleries={galleries}/> {/* Ora passa gli eventi e le gallerie */}
+      <MapboxMap events={events} galleries={galleries}/> 
     </div>
   );
 };

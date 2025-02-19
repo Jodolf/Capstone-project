@@ -5,7 +5,7 @@ import "../styles/GalleryDetail.css";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
-  const navigate = useNavigate(); // Aggiunto per la navigazione
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     fetch("http://localhost:3001/api/users/saved-events", {
