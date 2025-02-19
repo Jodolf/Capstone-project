@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react"; // ✅ Aggiunto useEffect
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Alert } from "react-bootstrap";
+
+import "../styles/EditEvent.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,12 +36,12 @@ const Login = () => {
 };
 
   return (
-    <div className="container mt-4">
-      <h2>Login</h2>
+    <div className="edit-event-container">
+      <h2>LOGIN</h2>
       {error && <p className="text-danger">{error}</p>}
       <form onSubmit={handleLogin}>
         <div className="mb-3">
-          <label>Email</label>
+          <label>EMAIL</label>
           <input
             type="email"
             className="form-control"
@@ -48,7 +51,7 @@ const Login = () => {
           />
         </div>
         <div className="mb-3">
-          <label>Password</label>
+          <label>PASSWORD</label>
           <input
             type="password"
             className="form-control"
@@ -57,7 +60,11 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Login</button>
+        <div className="edit-event-buttons">
+            <Button type="submit" className="button-primary">
+              SAVE
+            </Button>
+        </div>
       </form>
     </div>
   );

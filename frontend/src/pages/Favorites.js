@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaRegEye, FaEye } from "react-icons/fa"; // Icone occhio
+import "../styles/GalleryDetail.css";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -30,22 +31,25 @@ const Favorites = () => {
 
   return (
     <div className="container mt-4">
-      <h2>I miei eventi preferiti</h2>
       {favorites.length === 0 ? (
-        <p>Non hai ancora salvato eventi.</p>
+        <p>NO EVENTS SAVED.</p>
       ) : (
-<ul>
-  {favorites.map((event) => (
-    <li
-      key={event._id}
-      onClick={() => navigate(`/event/${event._id}`)}
-      style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-    >
-      <FaEye color="#6E32FF" size={24} style={{ marginRight: "8px" }} />
-      <h3>{event.title}</h3>
-    </li>
-  ))}
-</ul>
+
+        <div className="gallery-events-list">
+          {favorites.map((event) => (
+            <ul>
+                  <li key={event._id}>
+                    <Link to={`/event/${event._id}`} className="gallery-event-link" style={{ textDecoration: "none" }}>
+                      <strong>{event.title}</strong> -{" "}
+                      {new Date(event.date).toLocaleDateString()}
+                    </Link>
+                  </li>
+            </ul>
+          ))}
+        </div>
+
+
+
       )}
     </div>
   );

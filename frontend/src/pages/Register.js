@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Alert } from "react-bootstrap";
+
+import "../styles/EditEvent.css";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -31,32 +34,37 @@ const Register = () => {
     }
   };
     return (
-    <div className="container mt-4">
-      <h2>Registrati</h2>
+    <div className="edit-event-container">
+      <h2>SIGN UP</h2>
       {error && <p className="text-danger">{error}</p>}
       {successMessage && <p className="text-success">{successMessage}</p>}
 
       <form onSubmit={handleRegister}>
         <div className="mb-3">
-          <label>Nome</label>
+          <label>NAME</label>
           <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div className="mb-3">
-          <label>Email</label>
+          <label>EMAIL</label>
           <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="mb-3">
-          <label>Password</label>
+          <label>PASSWORD</label>
           <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div className="mb-3">
-          <label>Ruolo</label>
+          <label>ROLE</label>
           <select className="form-control" value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="user">Utente</option>
-            <option value="gallery_owner">Gallerista</option>
+            <option value="user">USER</option>
+            <option value="gallery_owner">GALLERY OWNER</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-success">Registrati</button>
+
+        <div className="edit-event-buttons">
+            <Button type="submit" className="button-primary">
+              SAVE
+            </Button>
+          </div>
       </form>
     </div>
   );
