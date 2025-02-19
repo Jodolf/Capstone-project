@@ -1,32 +1,102 @@
+/* 🌍 Contenitore principale */
 .gallery-detail-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 0px;
-    border: 1px solid var(--secondary-color);
-    backdrop-filter: blur(10px);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .gallery-detail-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: 15px;
-  }
-  
-  .gallery-detail-text {
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-  }
-  
-  .gallery-detail-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 0px;
-  }
-  
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding-top: 20px;
+}
+
+/* 📌 Card Galleria */
+.gallery-detail-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90vw;
+  max-width: 1200px;
+  background: white;
+  padding: 10px;
+  box-shadow: none;
+}
+
+/* 📷 Sezione Immagine */
+.gallery-detail-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px; /* 🔥 Forza l'occupazione dello spazio */
+}
+
+/* 🔲 Se non c'è immagine, il placeholder mantiene la dimensione */
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #ffffffff;
+}
+
+/* 📝 Sezione contenuto */
+.gallery-detail-content {
+  flex: 2;
+  padding-left: 40px;
+}
+
+.gallery-detail-title {
+  color: #6E32FF;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.gallery-detail-text {
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.gallery-detail-description {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* 📌 Lista Eventi Associati */
+.gallery-events-list {
+  width: 90vw;
+  max-width: 1200px;
+  margin-top: 20px;
+}
+
+.gallery-events-list h3 {
+  font-size: 24px;
+  color: #6E32FF;
+}
+
+.gallery-events-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.gallery-events-list li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid black; /* 🔥 Linea nera divisoria */
+  width: 100%; /* 🔥 Occupa tutta la larghezza */
+}
+
+/* 🔗 Effetto Scale-up su Hover per il link degli Eventi */
+.gallery-event-link {
+  color: #6E32FF;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block; /* 🔥 Necessario per trasformazioni */
+  transition: transform 0.2s ease-in-out;
+}
+
+.gallery-event-link:hover {
+  transform: scale(1.03); /* 🔥 Effetto ingrandimento */
+}

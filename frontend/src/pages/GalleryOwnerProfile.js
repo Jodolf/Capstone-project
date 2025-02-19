@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, ListGroup } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import CreateGallery from "../components/CreateGallery";
+import "../styles/GalleryOwnerProfile.css"; // 🔥 Importa il CSS
 
 const GalleryOwnerProfile = () => {
   const [galleries, setGalleries] = useState([]);
@@ -35,22 +36,27 @@ const GalleryOwnerProfile = () => {
   }, []);
 
   return (
-    <Container className="mt-4">
-      <h2>Le tue Gallerie</h2>
-      {galleries.length > 0 ? (
-        <ListGroup>
-          {galleries.map((gallery) => (
-            <ListGroup.Item key={gallery._id} onClick={() => navigate(`/manage-gallery/${gallery._id}`)}>
-              <h4>{gallery.name}</h4>
-              <p>{gallery.location}</p>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      ) : (
-        <p>Nessuna galleria trovata.</p>
-      )}
-      <CreateGallery onGalleryCreated={(newGallery) => setGalleries([...galleries, newGallery])} />
+    <Container className="edit-event-container">
+      <h2>YOUR GALLERIES</h2>
 
+      {galleries.length > 0 ? (
+        <div className="gallery-grid">
+          {galleries.map((gallery) => (
+            <div
+              key={gallery._id}
+              className="gallery-card-owner"
+              onClick={() => navigate(`/manage-gallery/${gallery._id}`)}
+            >
+              <h4 className="gallery-name">{gallery.name}</h4>
+              <p className="gallery-location">{gallery.location}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="no-gallery-text">NO GALLERY FOUND.</p>
+      )}
+      
+      <CreateGallery onGalleryCreated={(newGallery) => setGalleries([...galleries, newGallery])} />
     </Container>
   );
 };

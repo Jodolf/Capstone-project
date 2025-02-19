@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Container, Alert } from "react-bootstrap";
+import "../styles/EditEvent.css"; // 🔥 Riutilizza lo stesso CSS di EditEvent
 
 const OwnerProfile = () => {
   const [owner, setOwner] = useState(null);
@@ -76,31 +78,55 @@ const OwnerProfile = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Profilo Gallerista</h2>
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+    <Container className="edit-event-container">
+      <h2 className="edit-event-title">PROFILE</h2> {/* Stile di EditEvent */}
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+      {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-      <form onSubmit={handleUpdateProfile}>
-        <div className="mb-3">
-          <label className="form-label">Nome</label>
-          <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
+      <Form onSubmit={handleUpdateProfile}>
+        <Form.Group className="mb-3">
+          <Form.Label>NAME</Form.Label>
+          <Form.Control
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>EMAIL</Form.Label>
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+        {/* 🔥 Profilo immagine (opzionale, da sbloccare se servisse) */}
+        {/* 
+        <Form.Group className="mb-3">
+          <Form.Label>Profile Image</Form.Label>
+          <Form.Control type="file" onChange={handleImageUpload} />
+          {profileImage && (
+            <img
+              src={`http://localhost:3001${profileImage}`}
+              alt="Profilo"
+              className="mt-2"
+              style={{ width: "100px", borderRadius: "50%" }}
+            />
+          )}
+        </Form.Group> 
+        */}
+
+        <div className="edit-event-buttons">
+          <Button type="submit" className="button-primary">
+            SAVE
+          </Button>
         </div>
-
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-
-        {/*<div className="mb-3">
-          <label className="form-label">Immagine del profilo</label>
-          <input type="file" className="form-control" onChange={handleImageUpload} />
-          {profileImage && <img src={`http://localhost:3001${profileImage}`} alt="Profilo" className="mt-2" style={{ width: "100px", borderRadius: "50%" }} />}
-        </div>*/}
-
-        <button type="submit" className="btn btn-primary">Aggiorna Profilo</button>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
 

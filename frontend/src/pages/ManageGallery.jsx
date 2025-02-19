@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Container, ListGroup, Form, Button, Alert } from "react-bootstrap";
 import CreateEvent from "../components/CreateEvent";
+import "../styles/ManageGallery.css";
 
 const ManageGallery = () => {
   const { id: galleryId } = useParams();
@@ -72,26 +73,30 @@ const ManageGallery = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("image", file);
-  
+
     try {
-      const response = await fetch("http://localhost:3001/api/galleries/upload", {
-        method: "POST",
-        body: formData,
-      });
-  
+      const response = await fetch(
+        "http://localhost:3001/api/galleries/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Errore durante l'upload");
-  
+      if (!response.ok)
+        throw new Error(data.error || "Errore durante l'upload");
+
       console.log("✅ Immagine caricata con successo:", data.imageUrl);
       setImages((prevImages) => [...prevImages, data.imageUrl]);
     } catch (error) {
       console.error("❌ Errore nell'upload dell'immagine:", error);
     }
   };
-  
+
   // Funzione per aggiornare la galleria
   const handleUpdateGallery = async (e) => {
     e.preventDefault();
@@ -161,123 +166,114 @@ const ManageGallery = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <h2>Gestione Galleria</h2>
+    <Container className="manage-gallery-container">
       {gallery ? (
         <>
-          <h3>{gallery.name}</h3>
-          <p>Posizione: {gallery.location}</p>
+          <div className="manage-gallery-layout">
+            {/* 📌 Sezione Sinistra: Gestione Galleria */}
+            <div className="manage-gallery-section">
+              <h2>MANAGE GALLERY</h2>
+              {successMessage && <Alert variant="success">{successMessage}</Alert>}
+              {error && <Alert variant="danger">{error}</Alert>}
+  
+              <Form onSubmit={handleUpdateGallery}>
+                <Form.Group className="mb-3">
+                  <Form.Label>NAME</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+  
+                <Form.Group className="mb-3">
+                  <Form.Label>DESCRIPTION</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+  
+                <Form.Group className="mb-3">
+                  <Form.Label>POSITION</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+  
+                <Form.Group className="mb-3">
+                  <Form.Label>LATITUDE</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={latitude}
+                    onChange={(e) => setLatitude(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+  
+                <Form.Group className="mb-3">
+                  <Form.Label>LONGITUDE</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={longitude}
+                    onChange={(e) => setLongitude(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+  
+                <Form.Group className="mb-3">
+                  <Form.Label>UPLOAD IMAGE</Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                </Form.Group>
+  
+                <div className="edit-event-buttons">
+                  <Button type="submit" className="button-primary">SAVE</Button>
+                  <Button className="button-primary-outline" onClick={handleDeleteGallery}>DELETE</Button>
+                </div>
+              </Form>
+            </div>
+  
+            {/* 📌 Sezione Destra: Creazione Nuovo Evento */}
+            <div className="create-event-section">
+              <h2>CREATE NEW EVENT</h2>
+              <CreateEvent onEventCreated={(newEvent) => setEvents([...events, newEvent])} galleryId={gallery._id} />
+            </div>
+          </div>
 
-          {/* Form per Modificare la Galleria */}
-          <h3>Modifica Galleria</h3>
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
-          {error && <Alert variant="danger">{error}</Alert>}
-
-          <Form onSubmit={handleUpdateGallery}>
-            <Form.Group className="mb-3">
-              <Form.Label>Nome Galleria</Form.Label>
-              <Form.Control
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Descrizione</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Posizione</Form.Label>
-              <Form.Control
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Latitudine</Form.Label>
-              <Form.Control
-                type="number"
-                value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Longitudine</Form.Label>
-              <Form.Control
-                type="number"
-                value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Carica Immagine</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </Form.Group>
-
-            <Button type="submit">Salva Modifiche</Button>
-          </Form>
-
-          {/* Pulsante per Eliminare la Galleria */}
-          <Button
-            variant="danger"
-            className="mt-3"
-            onClick={handleDeleteGallery}
-          >
-            🗑 Elimina Galleria
-          </Button>
+          <h2>GALLERY EVENTS</h2>
+          {/* 📌 Sezione Bassa: Lista Eventi della Galleria */}
+          <div className="manage-gallery-events-list">
+            {events.length > 0 ? (
+              <ul>
+                {events.map((event) => (
+                  <li key={event._id}>
+                    <Link to={`/event/${event._id}`} className="manage-gallery-event-link" style={{ textDecoration: "none" }}>
+                      <strong>{event.title}</strong> -{" "}
+                      {new Date(event.date).toLocaleDateString()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>NO EVENT FOUND.</p>
+            )}
+          </div>
         </>
       ) : (
-        <p>Caricamento della galleria...</p>
-      )}
-
-      <h3>Eventi Associati</h3>
-      {events.length > 0 ? (
-        <ListGroup>
-          {events.map((event) => (
-            <ListGroup.Item key={event._id}>
-              <Link
-                to={`/event/${event._id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <strong>{event.title}</strong> -{" "}
-                {new Date(event.date).toLocaleDateString()}
-              </Link>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      ) : (
-        <p>Nessun evento trovato.</p>
-      )}
-
-      {gallery && (
-        <>
-          <h3>Crea un Nuovo Evento</h3>
-          <CreateEvent
-            onEventCreated={(newEvent) => setEvents([...events, newEvent])}
-            galleryId={gallery._id}
-          />
-        </>
+        <p>LOADING...</p>
       )}
     </Container>
   );
-};
+  };
 
 export default ManageGallery;

@@ -52,10 +52,10 @@ const CreateGallery = ({ onGalleryCreated }) => {
       {showAlert && (
         <Alert variant="success">Galleria creata con successo!</Alert>
       )}
-      <h3>Crea una nuova Galleria</h3>
+      <h2>CREATE A NEW GALLERY</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Nome Galleria</Form.Label>
+          <Form.Label>NAME</Form.Label>
           <Form.Control
             type="text"
             value={name}
@@ -65,7 +65,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Posizione</Form.Label>
+          <Form.Label>POSITION</Form.Label>
           <Form.Control
             type="text"
             value={location}
@@ -75,7 +75,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Latitudine</Form.Label>
+          <Form.Label>LATITUDE</Form.Label>
           <Form.Control
             type="number"
             step="0.0001"
@@ -88,7 +88,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Longitudine</Form.Label>
+          <Form.Label>LONGITUDE</Form.Label>
           <Form.Control
             type="number"
             step="0.0001"
@@ -101,7 +101,7 @@ const CreateGallery = ({ onGalleryCreated }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Descrizione</Form.Label>
+          <Form.Label>DESCRIPTION</Form.Label>
           <Form.Control
             as="textarea"
             value={description}
@@ -109,7 +109,12 @@ const CreateGallery = ({ onGalleryCreated }) => {
             required
           />
         </Form.Group>
-        <Button type="submit">Crea Galleria</Button>
+
+        <div className="edit-event-buttons">
+          <Button type="submit" className="button-primary">
+            CREATE
+          </Button>
+        </div>
       </Form>
     </>
   );

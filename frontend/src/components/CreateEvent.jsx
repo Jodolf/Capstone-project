@@ -59,21 +59,11 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
   return (
     <>
       {showAlert && (
-        <Alert variant="success">Evento creato con successo!</Alert>
+        <Alert variant="success">EVENT CREATED</Alert>
       )}
       <Form onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.Label>Descrizione</Form.Label>
-          <Form.Control
-            as="textarea"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Titolo Evento</Form.Label>
+      <Form.Group>
+          <Form.Label>TITLE</Form.Label>
           <Form.Control
             type="text"
             value={title}
@@ -83,7 +73,18 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Data Evento</Form.Label>
+          <Form.Label>DESCRIPTION</Form.Label>
+          <Form.Control
+            as="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+
+        <Form.Group>
+          <Form.Label>DATE</Form.Label>
           <Form.Control
             type="date"
             value={date}
@@ -93,7 +94,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Posizione</Form.Label>
+          <Form.Label>POSITION</Form.Label>
           <Form.Control
             type="text"
             value={location}
@@ -102,7 +103,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Latitudine</Form.Label>
+          <Form.Label>LATITUDE</Form.Label>
           <Form.Control
             type="number"
             value={latitude}
@@ -112,7 +113,7 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Longitudine</Form.Label>
+          <Form.Label>LONGITUDE</Form.Label>
           <Form.Control
             type="number"
             value={longitude}
@@ -122,20 +123,20 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Tipo Evento</Form.Label>
+          <Form.Label>KIND</Form.Label>
           <Form.Select
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value="exhibition">Exhibition</option>
-            <option value="performance">Performance</option>
-            <option value="music">Music</option>
-            <option value="workshop">Workshop</option>
+            <option value="exhibition">EXHIBITION</option>
+            <option value="performance">PERFORMANCE</option>
+            <option value="music">MUSIC</option>
+            <option value="workshop">WORKSHOP</option>
           </Form.Select>
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Costo (€)</Form.Label>
+          <Form.Label>COST (€)</Form.Label>
           <Form.Control
             type="number"
             value={cost}
@@ -144,7 +145,11 @@ const CreateEvent = ({ onEventCreated, galleryId  = null }) => {
           />
         </Form.Group>
 
-        <Button type="submit">Crea</Button>
+        <div className="edit-event-buttons">
+          <Button type="submit" className="button-primary">
+            CREATE
+          </Button>
+        </div>
       </Form>
     </>
   );

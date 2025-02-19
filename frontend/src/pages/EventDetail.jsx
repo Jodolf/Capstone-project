@@ -105,11 +105,11 @@ const EventDetails = () => {
         <div className="event-detail-card">
           {/* 📷 Sezione Immagine + Occhio */}
           <div className="event-detail-image-container">
-            {event.images?.length > 0 ? (
+            {/*{event.images?.length > 0 ? (
               <img src={`http://localhost:3001${event.images[0]}`} alt="Immagine evento" className="event-detail-image" />
             ) : (
               <div className="event-placeholder"></div> // Se non c'è immagine
-            )}
+            )}*/}
             {user?.role === "user" && (
               <button className="favorite-button" onClick={() => toggleFavorite(event._id)}>
                 {savedEvents.has(event._id) ? (

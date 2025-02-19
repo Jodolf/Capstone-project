@@ -233,7 +233,7 @@ const EditEvent = () => {
               className="button-primary-outline"
               onClick={() => navigate(`/event/${eventId}`)}
             >
-              DELETE
+              GO BACK
             </Button>
           </div>
         </Form>

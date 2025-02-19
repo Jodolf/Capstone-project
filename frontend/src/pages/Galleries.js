@@ -27,31 +27,26 @@ const Galleries = () => {
   }, []);
 
   return (
-<Container className="galleries-container">
-  <h2>Gallerie d'Arte</h2>
-  <Row>
-    {galleries.length > 0 ? (
-      galleries.map((gallery) => (
-        <Col key={gallery._id} md={4} className="mb-4">
-          <Card className="gallery-card" onClick={() => navigate(`/gallery/${gallery._id}`)}>
-            <Card.Img
-              variant="top"
-              src={gallery.images.length > 0 ? gallery.images[0] : "https://via.placeholder.com/300x200"}
-              alt={gallery.name}
-            />
-            <Card.Body>
-              <Card.Title className="gallery-card-title">{gallery.name}</Card.Title>
-              <Card.Text className="gallery-card-text">{gallery.location}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))
-    ) : (
-      <p>❌ Nessuna galleria trovata.</p>
-    )}
-  </Row>
-</Container>
+    <div className="galleries-container">
+      {galleries.map((gallery) => (
+        <div
+          key={gallery._id}
+          className="gallery-card"
+          onClick={() => navigate(`/gallery/${gallery._id}`)}
+        >
+          {gallery.images?.length > 0 ? (
+            <img src={gallery.images[0]} alt={gallery.name} />
+          ) : (
+            <div className="gallery-placeholder"></div> // 🔥 Placeholder bianco
+          )}
+          <div className="gallery-info">
+            <h3 className="gallery-title">{gallery.name}</h3>
+            <p className="gallery-location">{gallery.location}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   );
-};
+  };
 
 export default Galleries;
