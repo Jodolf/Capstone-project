@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Alert } from "react-bootstrap";
+import "../styles/EditEvent.css";
 
 const EditEvent = () => {
   const { eventId } = useParams();
@@ -43,29 +44,31 @@ const EditEvent = () => {
     fetchEvent();
   }, [eventId]);
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("image", file);
-  
+
     try {
-      const response = await fetch("http://localhost:3001/api/events/upload", {
+      const response = await fetch("http://localhost:3001/api/upload", {
         method: "POST",
         body: formData,
       });
-  
+
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Errore durante l'upload");
-  
-      console.log("✅ Immagine caricata con successo:", data.imageUrl);
+      if (!response.ok) throw new Error(data.message || "Errore nell'upload");
+
+      console.log("✅ Immagine caricata:", data.imageUrl);
+
+      // 🔥 Aggiunge l'immagine all'array esistente
       setImages((prevImages) => [...prevImages, data.imageUrl]);
     } catch (error) {
       console.error("❌ Errore nell'upload dell'immagine:", error);
     }
   };
-  
+
   const handleUpdateEvent = async (e) => {
     e.preventDefault();
     setError(null);
@@ -73,6 +76,19 @@ const EditEvent = () => {
 
     try {
       const token = localStorage.getItem("token");
+
+      const eventData = {
+        title,
+        description,
+        date,
+        location,
+        type,
+        cost,
+        latitude,
+        longitude,
+        images: images.length > 0 ? images : undefined, // 🔥 Assicura che l'immagine venga salvata
+      };
+
       const response = await fetch(
         `http://localhost:3001/api/events/${eventId}`,
         {
@@ -81,38 +97,29 @@ const EditEvent = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            title,
-            description,
-            date,
-            location,
-            type,
-            cost,
-            latitude,
-            longitude,
-          }),
+          body: JSON.stringify(eventData),
         }
       );
 
       if (!response.ok) throw new Error("Errore durante l'aggiornamento");
 
       setSuccessMessage("Evento aggiornato con successo!");
-      setTimeout(() => navigate(`/event/${eventId}`), 2000); // Torna alla pagina evento dopo 2s
+      setTimeout(() => navigate(`/event/${eventId}`), 2000);
     } catch (error) {
       setError("Errore nell'aggiornamento dell'evento");
     }
   };
 
   return (
-    <Container className="mt-4">
-      <h2>Modifica Evento</h2>
+    <Container className="edit-event-container">
+      <h2>UPDATE EVENT</h2>
       {error && <Alert variant="danger">{error}</Alert>}
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       {event ? (
         <Form onSubmit={handleUpdateEvent}>
           <Form.Group className="mb-3">
-            <Form.Label>Titolo</Form.Label>
+            <Form.Label>TITLE</Form.Label>
             <Form.Control
               type="text"
               value={title}
@@ -122,7 +129,7 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Descrizione</Form.Label>
+            <Form.Label>DESCRIPTION</Form.Label>
             <Form.Control
               as="textarea"
               value={description}
@@ -132,7 +139,7 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Data</Form.Label>
+            <Form.Label>DATE</Form.Label>
             <Form.Control
               type="date"
               value={date}
@@ -142,7 +149,7 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Posizione</Form.Label>
+            <Form.Label>POSITION</Form.Label>
             <Form.Control
               type="text"
               value={location}
@@ -152,7 +159,7 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Latitudine</Form.Label>
+            <Form.Label>LATITUDE</Form.Label>
             <Form.Control
               type="number"
               value={latitude}
@@ -162,7 +169,7 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Longitudine</Form.Label>
+            <Form.Label>LONGITUDE</Form.Label>
             <Form.Control
               type="number"
               value={longitude}
@@ -172,21 +179,21 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Tipo</Form.Label>
+            <Form.Label>KIND</Form.Label>
             <Form.Select
               value={type}
               onChange={(e) => setType(e.target.value)}
               required
             >
-              <option value="music">Musica</option>
-              <option value="exhibition">Mostra</option>
-              <option value="workshop">Workshop</option>
-              <option value="performance">Performance</option>
+              <option value="music">MUSIC</option>
+              <option value="exhibition">EXHIBITION</option>
+              <option value="workshop">WORKSHOP</option>
+              <option value="performance">PERFORMANCE</option>
             </Form.Select>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Costo (€)</Form.Label>
+            <Form.Label>COST (€)</Form.Label>
             <Form.Control
               type="number"
               value={cost}
@@ -196,24 +203,39 @@ const EditEvent = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Carica Immagine Evento</Form.Label>
+            <Form.Label>UPLOAD IMAGE</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
             />
           </Form.Group>
+          {/* 🔥 Anteprima delle immagini caricate */}
+          {images.length > 0 && (
+            <div className="image-preview">
+              {images.map((img, index) => (
+                <img
+                  key={index}
+                  src={`http://localhost:3001${img}`}
+                  alt="Anteprima"
+                  className="event-image-preview"
+                />
+              ))}
+            </div>
+          )}
 
-          <Button type="submit" className="button-primary">
-            Salva Modifiche
-          </Button>
-          <Button
-            variant="secondary"
-            className="ms-2"
-            onClick={() => navigate(`/event/${eventId}`)}
-          >
-            Annulla
-          </Button>
+          <div className="edit-event-buttons">
+            <Button type="submit" className="button-primary">
+              SAVE
+            </Button>
+            <Button
+              variant="secondary"
+              className="button-primary-outline"
+              onClick={() => navigate(`/event/${eventId}`)}
+            >
+              DELETE
+            </Button>
+          </div>
         </Form>
       ) : (
         <p>Caricamento in corso...</p>

@@ -1,44 +1,120 @@
+/* 🌍 Contenitore principale */
 .event-detail-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0px;
-  border: 1px solid var(--secondary-color);
-  backdrop-filter: blur(10px);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  /*height: 100vh;*/
+  display: flex;
+  align-items: flex-start; /* 🔥 Allinea in alto */
+  justify-content: center;
+  background-color: #ffffff;
+  padding-top: 20px; /* Aggiunto un piccolo padding sopra */
 }
 
-.event-detail-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--primary-color);
-  margin-bottom: 15px;
+/* 📌 Card Evento */
+.event-detail-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90vw;
+  max-width: 1200px;
+  background: white;
+  padding: 10px;
+  box-shadow: none; /* 🔥 No box shadow */
 }
 
-.event-detail-text {
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--primary-color);
-  margin-bottom: 10px;
+/* 📷 Sezione Immagine */
+.event-detail-image-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.event-detail-link {
-  color: var(--secondary-color);
-  text-decoration: underline;
+.event-detail-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 500px;
+}
+
+/* 👁️ Occhio */
+.favorite-button {
+  position: absolute;
+  padding: 10px;
+  top: 30px;
+  right: 10px;
+  background: none;
+  border: none;
   cursor: pointer;
 }
 
+/* 📝 Sezione contenuto */
+.event-detail-content {
+  flex: 2;
+  padding-left: 40px;
+}
+
+.event-detail-title {
+  color: #6E32FF;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.event-detail-text {
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.event-detail-description {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* 🔗 Effetto Scale-up su Hover per il link della Galleria */
+.event-detail-link {
+  color: #6E32FF;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block; /* 🔥 Necessario per trasformazioni */
+  transition: transform 0.2s ease-in-out;
+}
+
+.event-detail-link:hover {
+  transform: scale(1.03); /* 🔥 Effetto ingrandimento */
+}
+
+/* 🛠️ Stile per i bottoni di modifica ed eliminazione */
 .event-detail-buttons {
   display: flex;
-  gap: 15px;
+  gap: 20px; /* 🔥 Spazio tra i bottoni */
   margin-top: 20px;
 }
-  
-.event-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--secondary-color);
-  transition: all 0.3s ease-in-out;
-  border-radius: 0px; /* 🔥 Ora rimuove il border-radius */
+
+.event-detail-buttons .button-primary {
+  background-color: #6E32FF; /* Colore viola per coerenza con il tema */
+  color: white;
+  border: none;
+  max-width: 180px;
+  transition: background 0.3s ease-in-out;
+}
+
+.event-detail-buttons .button-primary:hover {
+  background-color: #000000; /* 🔥 Cambia in nero al passaggio del mouse */
+}
+
+/* 🔥 Rimuove l'outline blu dal bottone "Elimina" */
+.event-detail-buttons .button-primary-outline {
+  border: 2px solid #6E32FF; /* Mantiene il bordo viola */
+  color: #6E32FF;
+  max-width: 180px;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.event-detail-buttons .button-primary-outline:hover {
+  background-color: #6E32FF; /* 🔥 Cambia in nero al passaggio del mouse */
+  color: white;
 }

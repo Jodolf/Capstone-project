@@ -9,7 +9,7 @@ import galleryRoutes from './routes/galleryRoute.js';
 import userRoutes from './routes/userRoute.js';
 import eventRoutes from './routes/eventRoute.js';
 
-import uploadRoutes from "./routes/uploadRoute.js"; // Aggiunta della route per upload
+import uploadRoutes from "./routes/uploadRoute.js";
 
 // Caricare le variabili di ambiente
 dotenv.config();
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.use('/api/galleries', galleryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
-app.use("/api/upload", uploadRoutes); // Uso della route di upload
+app.use("/api/upload", uploadRoutes); // 🟢 Assicura che questa linea sia presente
 
 
 // Avviare il server

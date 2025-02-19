@@ -92,11 +92,11 @@ const UserProfile = () => {
           <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
-        <div className="mb-3">
+        {/*<div className="mb-3">
           <label className="form-label">Immagine del profilo</label>
           <input type="file" className="form-control" onChange={handleImageUpload} />
           {profileImage && <img src={`http://localhost:3001${profileImage}`} alt="Profilo" className="mt-2" style={{ width: "100px", borderRadius: "50%" }} />}
-        </div>
+        </div>*/}
 
         <button type="submit" className="btn btn-primary">Aggiorna Profilo</button>
       </form>

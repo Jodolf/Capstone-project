@@ -10,6 +10,10 @@ router.post("/", upload.single("image"), (req, res) => {
     return res.status(400).json({ message: "Errore durante il caricamento dell'immagine" });
   }
   res.status(200).json({ imageUrl: `/uploads/${req.file.filename}` });
+
+  // 🔥 Restituisce il percorso dell'immagine
+  const imageUrl = `/uploads/${req.file.filename}`;
+  res.json({ imageUrl });
 });
 
 // Servire i file statici dalla cartella uploads

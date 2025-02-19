@@ -1,0 +1,46 @@
+/* Navbar.css */
+.navbar-custom {
+  background-color: #6e32ff !important; /* Sfondo viola */
+  color: #ffffff !important; /* Testo bianco */
+  border-bottom: 0px;
+  padding: 10px 10px;
+  border-bottom: 3px solid black; /* Bordo inferiore bianco */
+
+  z-index: 1000; /* Mantiene la navbar sopra ogni altro elemento */
+
+}
+
+.navbar-custom .nav-link,
+.navbar-custom {
+  color: #ffffff !important; /* Testo bianco */
+}
+.navbar-brand {
+  font-weight: bold;
+  color: #ffffff !important;
+}
+.navbar-custom .nav-link:hover {
+  color: #d1c1ff !important; /* Viola più chiaro al passaggio */
+}
+
+/* Stile per i bottoni della navbar */
+.navbar-custom .button-primary {
+  background-color: #ffffff;
+  color: #6e32ff;
+  border: none;
+}
+
+.navbar-custom .button-primary:hover {
+  background-color: #000000;
+  color: white;
+}
+
+.navbar-custom .button-primary-outline {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.navbar-custom .button-primary-outline:hover {
+  background-color: #ffffff;
+  color: #6e32ff;
+}

@@ -12,6 +12,7 @@ const Events = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const isAuthenticated = !!token;
+  const userRole = localStorage.getItem("userRole"); // 🔥 Recupera il ruolo salvato
 
   useEffect(() => {
     // Fetch eventi
@@ -86,59 +87,42 @@ const Events = () => {
   };
 
   return (
-<Container className="events-container">
-  <h2>Eventi</h2>
-  <Row>
-    {events.map((event) => (
-      <Col key={event._id} md={4} className="mb-4">
-        <Card className="event-card">
-          <Card.Body>
-            <Card.Title className="event-card-title">{event.title}</Card.Title>
-            <Card.Text className="event-card-text">{event.description}</Card.Text>
-            <Card.Text className="event-card-text">
-              <strong>Data:</strong> {new Date(event.date).toLocaleDateString()}
-            </Card.Text>
-            <Button
-              className="button-primary-outline event-card-button"
-              onClick={() => navigate(`/event/${event._id}`)}
-            >
-              Dettagli Evento
-            </Button>
-            <Button
-  className="favorite-button"
-  onClick={() => toggleFavorite(event._id)}
->
-  {savedEvents.has(event._id) ? (
-    <FaEye color="#6E32FF" size={24} /> // 🔵 Occhio Viola se salvato
-  ) : (
-    <FaRegEye color="#000000" size={24} /> // ⚫ Occhio Nero se non salvato
-  )}
-</Button>
+    <div className="events-container">
+      {events.map((event) => (
+        <div
+          key={event._id}
+          className="event-card"
+          onClick={() => navigate(`/event/${event._id}`)}
+          style={{
+            background: event.images.length > 0 ? `url(http://localhost:3001${event.images[0]}) center/cover no-repeat` : "#FFFFFF",
+          }}
+        
+        >
+          {/*<img src={event.images[0] || "/uploads/default-event.jpg"} alt={event.title} />*/}
+          <div className="event-info">
+            <h3 className="event-title">{event.title}</h3>
+            <p className="event-date">{new Date(event.date).toLocaleDateString()}</p>
+          </div>
 
-          </Card.Body>
-        </Card>
-      </Col>
-    ))}
-  </Row>
+          {isAuthenticated && userRole === "user" && (
+  <button
+    className="favorite-button"
+    onClick={(e) => {
+      e.stopPropagation();
+      toggleFavorite(event._id);
+    }}
+  >
+    {savedEvents.has(event._id) ? (
+      <FaEye color="#6E32FF" size={24} /> // 🟣 Occhio Viola se salvato
+    ) : (
+      <FaRegEye color="#000000" size={24} /> // ⚫ Occhio Nero se non salvato
+    )}
+  </button>
+)}
 
-      {/* Modal per invitare al login */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Accedi per salvare gli eventi</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Devi effettuare il login per aggiungere eventi ai preferiti.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Chiudi
-          </Button>
-          <Button variant="primary" onClick={() => navigate("/login")}>
-            Accedi
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
+        </div>
+      ))}
+    </div>
   );
 };
 

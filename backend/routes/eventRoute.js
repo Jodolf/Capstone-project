@@ -1,6 +1,7 @@
 import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
 import checkRole from '../middleware/roleMiddleware.js';
+import multer from "multer";
 
 import {
   createEvent,
@@ -8,9 +9,21 @@ import {
   getEventById,
   getEventsByGallery,
   getEventsByType,
+  uploadEventImage,
   updateEvent,
   deleteEvent,
 } from '../controllers/eventController.js';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // 📂 Salva le immagini nella cartella uploads/
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -27,6 +40,8 @@ router.get('/:id', getEventById);
 router.get("/type", getEventsByType); 
 
 router.get("/gallery/:galleryId", getEventsByGallery);
+
+router.post("/uploads", upload.single("image"), uploadEventImage);
 
 // Rotta per aggiornare un evento (accessibile solo ai galleristi)
 router.put('/:id', authMiddleware, checkRole(['gallery_owner']), updateEvent);

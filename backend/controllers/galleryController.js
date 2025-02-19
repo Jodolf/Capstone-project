@@ -34,25 +34,6 @@ const getOwnedGalleries = async (req, res) => {
   }
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // 📂 Cartella dove salvare le immagini
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-// 🔥 Route per il caricamento immagini di una galleria
-router.post("/upload", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "Nessun file caricato!" });
-  }
-  res.json({ imageUrl: `/uploads/${req.file.filename}` });
-});
-
 // Crea una nuova galleria e assegna il proprietario
 const createGallery = async (req, res) => {
   try {

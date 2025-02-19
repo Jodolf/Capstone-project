@@ -122,52 +122,45 @@ const getEventsByGallery = async (req, res) => {
   }
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // 📂 Cartella dove salvare le immagini
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-// 🔥 Route per il caricamento immagini di una galleria
-router.post("/upload", upload.single("image"), (req, res) => {
+const uploadEventImage = (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "Nessun file caricato!" });
   }
+
+  console.log("📷 Immagine caricata:", req.file.filename);
   res.json({ imageUrl: `/uploads/${req.file.filename}` });
-});
+};
 
 // Aggiorna un evento
 const updateEvent = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user.id;
-
   try {
-    let event = await Event.findById(id);
+      const { title, description, date, location, latitude, longitude, type, cost, images } = req.body;
 
-    if (!event) {
-      return res.status(404).json({ message: "Evento non trovato" });
-    }
+      // 🔥 Se l'evento esiste, aggiorniamo anche le immagini
+      const updatedEvent = await Event.findByIdAndUpdate(
+          req.params.id,
+          {
+              title,
+              description,
+              date,
+              location,
+              latitude,
+              longitude,
+              type,
+              cost,
+              $push: { images: { $each: images || [] } }, // 🔥 Aggiunge nuove immagini senza sovrascrivere
+          },
+          { new: true }
+      );
 
-    console.log("🔍 Proprietario evento:", event.owner ? event.owner.toString() : "Nessun owner");
-    console.log("🔑 Utente loggato:", userId);
+      if (!updatedEvent) {
+          return res.status(404).json({ message: "Evento non trovato" });
+      }
 
-    // 🔥 Controllo: solo il proprietario dell'evento può modificarlo
-    if (!event.owner || event.owner.toString() !== userId) {
-      console.error("❌ Tentativo di modifica non autorizzato!");
-      return res.status(403).json({ message: "Non sei autorizzato a modificare questo evento" });
-    }
-
-    event = await Event.findByIdAndUpdate(id, { ...req.body }, { new: true, runValidators: true });
-
-    res.status(200).json(event);
+      res.json(updatedEvent);
   } catch (error) {
-    console.error("❌ Errore durante l'aggiornamento dell'evento:", error);
-    res.status(500).json({ message: "Errore durante l'aggiornamento dell'evento", error });
+      console.error("Errore nell'aggiornamento dell'evento:", error);
+      res.status(500).json({ message: "Errore interno del server" });
   }
 };
 
@@ -196,6 +189,9 @@ export {
   getEventById,
   getEventsByType,
   getEventsByGallery,
+
+  uploadEventImage,
+  
   updateEvent,
   deleteEvent,
 };

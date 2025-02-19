@@ -4,8 +4,8 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background-color: #000000; /* Nero profondo */
-  color: #fff; /* Testo chiaro */
+  background-color: #ffffff; /* Nero profondo */
+  color: #000000; /* Testo chiaro */
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -32,10 +32,10 @@ button {
   font-weight: 600;
   transition: all 0.3s ease-in-out;
 }
-button:hover {
+/*button:hover {
   background: #3a7cc0;
   transform: scale(1.05);
-}
+}*/
 
 .button-primary,
 .button-primary-outline {
@@ -145,4 +145,51 @@ button:hover {
 .event-eye-button:hover {
   color: var(--secondary-color);
   transform: scale(1.1);
+}
+
+
+
+/* 🎨 Stile Generale degli Input */
+input, textarea, select {
+  font-family: inherit; /* 🔥 Usa lo stesso font del resto del sito */
+  font-size: 16px;
+  color: #000;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #000; /* 🔥 Sottolinea invece di box */
+  padding: 5px 0;
+  outline: none;
+  width: 100%;
+  transition: border-bottom 0.3s ease-in-out;
+  border-radius: 0;
+}
+
+/* 🔥 Effetto focus */
+input:focus, textarea:focus, select:focus {
+  border-bottom: 2px solid #6E32FF; /* Cambia in viola quando selezionato */
+  border-radius: 0;
+
+}
+
+/* 🔥 Rimuove gli stili di default dai select */
+select {
+  appearance: none; /* Rimuove lo stile di default del sistema */
+  cursor: pointer;
+}
+
+/* 🎨 Per le textarea: no resize */
+textarea {
+  resize: none;
+}
+
+/* 🎨 Stile del Placeholder */
+::placeholder {
+  color: #666;
+  opacity: 0.7;
+}
+
+/* 🔥 Disabilita la outline blu di Bootstrap */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: none;
 }
