@@ -209,7 +209,7 @@ const EditEvent = () => {
               onChange={handleImageUpload}
             />
           </Form.Group>
-          {images.length > 0 && (
+          {/*{images.length > 0 && (
             <div className="image-preview">
               {images.map((img, index) => (
                 <img
@@ -220,7 +220,7 @@ const EditEvent = () => {
                 />
               ))}
             </div>
-          )}
+          )}*/}
 
           <div className="edit-event-buttons">
             <Button type="submit" className="button-primary">

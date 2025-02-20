@@ -110,7 +110,7 @@ const EventDetails = () => {
               <img
                 src={`http://localhost:3001${
                   event.images[event.images.length - 1]
-                }`} // 🔥 Ultima immagine caricata
+                }`} 
                 alt="Immagine evento"
                 className="event-detail-image"
               />
