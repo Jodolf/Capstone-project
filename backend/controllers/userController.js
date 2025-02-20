@@ -86,6 +86,27 @@ const getUserProfile = async (req, res) => {
       .json({ message: "Errore durante il recupero del profilo", error });
   }
 };
+const updateUserProfile = async (req, res) => {
+  try {
+      const userId = req.user.id; // Recupera l'ID dell'utente autenticato
+      const { name, email } = req.body; // Ottieni i dati inviati dal frontend
+
+      const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { name, email },
+          { new: true, runValidators: true } // Opzioni per ottenere l'utente aggiornato
+      );
+
+      if (!updatedUser) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ error: "Server error" });
+  }
+};
 
 //LATO PREFERITI
 // Salva un evento nella lista dell'utente
@@ -170,6 +191,7 @@ export {
   registerUser,
   loginUser,
   getUserProfile,
+  updateUserProfile,
   saveEvent,
   removeSavedEvent,
   getSavedEvents,

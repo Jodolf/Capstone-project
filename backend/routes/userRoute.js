@@ -8,6 +8,7 @@ import {
   saveEvent,
   removeSavedEvent,
   getSavedEvents,
+  updateUserProfile,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 // Profilo utente autenticato
 router.get("/profile", authMiddleware, getUserProfile);
+router.put("/update-profile", authMiddleware, updateUserProfile);
 
 //PREFERITI
 // Salva un evento
