@@ -16,7 +16,7 @@ import {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // 📂 Salva le immagini nella cartella uploads/
+    cb(null, "uploads/"); 
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);

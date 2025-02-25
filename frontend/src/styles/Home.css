@@ -1,11 +1,11 @@
 .home-container {
     position: absolute;
-    top: 60px; /* 🔥 Modifica in base all'altezza della navbar */
+    top: 60px; /*  Modifica in base all'altezza della navbar */
     left: 0;
     right: 0;
     bottom: 0;
     width: 100vw;
-    height: calc(100vh - 60px); /* 🔥 Altezza dinamica che riempie tutto lo schermo sotto la navbar */
+    height: calc(100vh - 60px); /*  Altezza dinamica che riempie tutto lo schermo sotto la navbar */
   }
   
   .home-container > div {

@@ -11,7 +11,7 @@ router.post("/", upload.single("image"), (req, res) => {
   }
   res.status(200).json({ imageUrl: `/uploads/${req.file.filename}` });
 
-  // 🔥 Restituisce il percorso dell'immagine
+
   const imageUrl = `/uploads/${req.file.filename}`;
   res.json({ imageUrl });
 });

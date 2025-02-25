@@ -1,15 +1,15 @@
-/* 🌍 Contenitore principale */
+/*  Contenitore principale */
 .gallery-detail-container {
   width: 100vw;
   /*height: 100vh;*/
   display: flex;
-  align-items: flex-start; /* 🔥 Allinea in alto */
+  align-items: flex-start; 
   justify-content: center;
   background-color: #ffffff;
   padding-top: 20px; /* Aggiunto un piccolo padding sopra */
 }
 
-/* 📌 Card Galleria */
+/*  Card Galleria */
 .gallery-detail-card {
   display: flex;
   flex-direction: row;
@@ -69,7 +69,7 @@
   line-height: 1.5;
 }
 
-/* 📌 Lista Eventi Associati */
+/*  Lista Eventi Associati */
 .gallery-events-list {
   /*width: 90vw;*/
   max-width: 1200px;
@@ -90,20 +90,20 @@
   font-size: 18px;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 2px solid black; /* 🔥 Linea nera divisoria */
-  width: 100%; /* 🔥 Occupa tutta la larghezza */
+  border-bottom: 2px solid black;
+  width: 100%;
 }
 
-/* 🔗 Effetto Scale-up su Hover per il link degli Eventi */
+/*  Effetto Scale-up su Hover per il link degli Eventi */
 .gallery-event-link {
   color: #6E32FF;
   font-weight: bold;
   cursor: pointer;
-  display: inline-block; /* 🔥 Necessario per trasformazioni */
+  display: inline-block; 
   transition: transform 0.2s ease-in-out;
 }
 
 .gallery-event-link:hover {
-  transform: scale(1.03); /* 🔥 Effetto ingrandimento */
+  transform: scale(1.03); 
 }
 

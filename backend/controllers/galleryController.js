@@ -123,8 +123,8 @@ const uploadGalleryImage = async (req, res) => {
     // Aggiorniamo la galleria con la nuova immagine (aggiungendola all'array images)
     const updatedGallery = await Gallery.findByIdAndUpdate(
       galleryId,
-      { $push: { images: imageUrl } }, // 🔥 Aggiunge la nuova immagine all'array
-      { new: true } // 🔥 Restituisce il documento aggiornato
+      { $push: { images: imageUrl } }, 
+      { new: true } 
     );
 
     if (!updatedGallery) {

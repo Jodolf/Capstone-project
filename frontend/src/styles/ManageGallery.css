@@ -1,4 +1,4 @@
-/* 🎨 Stile Generale */
+/*  Stile Generale */
 .manage-gallery-container {
   /*max-width: 800px;*/
   margin: 40px auto;
@@ -30,7 +30,7 @@
   font-weight: bold;
 }
 
-/* 🔥 Input e Textarea con solo linea nera sotto */
+/*  Input e Textarea con solo linea nera sotto */
 .manage-gallery-container input,
 .manage-gallery-container textarea,
 .manage-gallery-container select {
@@ -47,14 +47,14 @@
   border-radius: 0;
 }
 
-/* 🔥 Focus con linea viola */
+/*  Focus con linea viola */
 .manage-gallery-container input:focus,
 .manage-gallery-container textarea:focus,
 .manage-gallery-container select:focus {
   border-bottom: 2px solid #6e32ff;
 }
 
-/* 🔥 Rimuove il bordo blu di Bootstrap */
+/*  Rimuove il bordo blu di Bootstrap */
 .manage-gallery-container input:focus,
 .manage-gallery-container textarea:focus,
 .manage-gallery-container select:focus {
@@ -62,7 +62,7 @@
   box-shadow: none;
 }
 
-/* 📋 Sezione eventi associati */
+/*  Sezione eventi associati */
 .manage-gallery-events-list {
   width: 100%;
   margin-top: 20px;
@@ -99,7 +99,7 @@
   transform: scale(1.03);
   color: #ffffff;
 }
-/* 🛠️ Pulsanti di gestione */
+/*  Pulsanti di gestione */
 .manage-gallery-buttons {
   display: flex;
   gap: 20px;

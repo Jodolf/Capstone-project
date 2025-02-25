@@ -1,22 +1,22 @@
 .events-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 🔥 Forza 3 eventi per riga */
-  gap: 50px; /* 🔥 Maggiore spazio tra le card */
-  max-width: 1800px; /* 🔥 Allarga l'area */
-  margin: 0 auto; /* 🔥 Centra il layout */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 50px; 
+  max-width: 1800px; 
+  margin: 0 auto;
   padding: 50px;
-  justify-content: center; /* 🔥 Forza l'allineamento al centro */
+  justify-content: center;
 }
 
 .event-card {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 400px; /* 🔥 Alza altezza per maggiore impatto visivo */
+  height: 400px; 
   background-color: black;
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
-  border: 3px solid #6E32FF; /* 🔥 Bordi viola più marcati */
+  border: 3px solid #6E32FF;
 }
 
 .event-card img {
@@ -57,12 +57,12 @@
 /* 🔹 Responsive */
 @media (max-width: 1400px) {
   .events-container {
-    grid-template-columns: repeat(2, 1fr); /* 🔥 2 eventi per row su schermi medi */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 900px) {
   .events-container {
-    grid-template-columns: repeat(1, 1fr); /* 🔥 1 evento per row su mobile */
+    grid-template-columns: repeat(1, 1fr); 
   }
 }
